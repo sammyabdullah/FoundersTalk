@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0f1f3d;
+  --navy-light: #1e3a5f;
+  --cream: #f8f6f1;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+}
+
+body {
+  @apply bg-[#f8f6f1] text-[#1a1a2e] antialiased;
+}
+
+.input {
+  @apply w-full border border-black/15 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0f1f3d]/20 focus:border-[#0f1f3d] transition-colors;
+}
