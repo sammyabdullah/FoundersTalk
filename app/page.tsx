@@ -64,7 +64,8 @@ export default function Home() {
       </main>
 
       <footer className="px-8 py-6 text-white/40 text-sm">
-        © {new Date().getFullYear()} FounderTalk
+        <p>© {new Date().getFullYear()} FounderTalk</p>
+        <p className="mt-1">Built for founders by Blossom Street Ventures. Contact us at <a href="mailto:sammy@blossomstreetventures.com" className="underline hover:text-white/60 transition-colors">sammy@blossomstreetventures.com</a></p>
       </footer>
     </div>
   )
