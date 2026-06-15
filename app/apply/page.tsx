@@ -77,8 +77,8 @@ export default function ApplyPage() {
       <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
         <nav className="px-8 py-6 border-b border-black/5">
           <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
-            <Image src="/logo.jpg" alt="FoundersTalk logo" width={32} height={32} className="rounded-sm" />
-            FoundersTalk
+            <Image src="/logo.jpg" alt="FounderTalk logo" width={32} height={32} className="rounded-sm" />
+            FounderTalk
           </Link>
         </nav>
         <div className="flex-1 flex items-center justify-center px-8">
@@ -97,8 +97,8 @@ export default function ApplyPage() {
     <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
       <nav className="px-8 py-6 border-b border-black/5">
         <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
-            <Image src="/logo.jpg" alt="FoundersTalk logo" width={32} height={32} className="rounded-sm" />
-            FoundersTalk
+            <Image src="/logo.jpg" alt="FounderTalk logo" width={32} height={32} className="rounded-sm" />
+            FounderTalk
           </Link>
       </nav>
 

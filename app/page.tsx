@@ -31,13 +31,13 @@ export default function Home() {
       <nav className="px-8 py-6 flex items-center gap-3">
         <Image
           src="/logo.jpg"
-          alt="FoundersTalk logo"
+          alt="FounderTalk logo"
           width={36}
           height={36}
           className="rounded-sm"
           style={{ mixBlendMode: 'screen' }}
         />
-        <span className="text-xl font-semibold tracking-tight">FoundersTalk</span>
+        <span className="text-xl font-semibold tracking-tight">FounderTalk</span>
       </nav>
 
       <main className="flex-1 flex flex-col lg:flex-row items-start justify-center gap-16 px-8 py-16 max-w-6xl mx-auto w-full">
@@ -61,7 +61,7 @@ export default function Home() {
             Founders talk<br />to founders.
           </h1>
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
-            FoundersTalk matches B2B SaaS founders for one-on-one conversations based on shared experience and where you're headed. No pitch decks. No panels. Just useful conversations with people who've been where you are.
+            FounderTalk matches B2B SaaS founders for one-on-one conversations based on shared experience and where you're headed. No pitch decks. No panels. Just useful conversations with people who've been where you are.
           </p>
           <Link
             href="/apply"
@@ -74,7 +74,7 @@ export default function Home() {
       </main>
 
       <footer className="px-8 py-6 text-white/40 text-sm">
-        © {new Date().getFullYear()} FoundersTalk
+        © {new Date().getFullYear()} FounderTalk
       </footer>
     </div>
   )

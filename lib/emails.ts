@@ -7,12 +7,12 @@ function BASE_URL() { return process.env.NEXT_PUBLIC_BASE_URL || 'https://founde
 
 export async function sendApplicationConfirmation(founder: Founder) {
   await getResend().emails.send({
-    from: `Sammy at FoundersTalk <${FROM()}>`,
+    from: `Sammy at FounderTalk <${FROM()}>`,
     to: founder.email,
     subject: "You're on the list",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Thanks for applying to FoundersTalk. We review every application personally — you'll hear from us shortly.</p>
+      <p>Thanks for applying to FounderTalk. We review every application personally — you'll hear from us shortly.</p>
       <p>Sammy</p>
     `,
   })
@@ -22,9 +22,9 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
   const topicLines = topics.map(t => `• ${t.name} — ${t.direction === 'been_through_this' ? "I've been through this" : "I'm figuring this out"}`).join('\n')
 
   await getResend().emails.send({
-    from: `FoundersTalk <${FROM()}>`,
+    from: `FounderTalk <${FROM()}>`,
     to: 'sammy@blossomstreetventures.com',
-    subject: `New FoundersTalk application — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
+    subject: `New FounderTalk application — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
     html: `
       <h2>New Application</h2>
       <p><strong>Email:</strong> ${founder.email}</p>
@@ -48,10 +48,10 @@ export async function sendWelcomeEmail(founder: Founder) {
   await getResend().emails.send({
     from: `Sammy <${FROM()}>`,
     to: founder.email,
-    subject: "You're in — FoundersTalk",
+    subject: "You're in — FounderTalk",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Welcome to FoundersTalk. Your profile is live and we'll reach out when we find a good match.</p>
+      <p>Welcome to FounderTalk. Your profile is live and we'll reach out when we find a good match.</p>
       <p>In the meantime, if you have any feedback on the signup experience or anything we should know, just reply to this email.</p>
       <p>Sammy</p>
     `,
@@ -69,7 +69,7 @@ export async function sendMatchEmail(
   const responseUrl = `${BASE_URL()}/match/${token}`
 
   await getResend().emails.send({
-    from: `Sammy at FoundersTalk <${FROM()}>`,
+    from: `Sammy at FounderTalk <${FROM()}>`,
     to: recipient.email,
     subject: 'A founder wants to talk to you',
     html: `
