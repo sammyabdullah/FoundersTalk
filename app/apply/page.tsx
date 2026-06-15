@@ -213,14 +213,6 @@ export default function ApplyPage() {
                 />
               </Field>
 
-              <Field label="Anything else you want a potential match to know?" hint="Optional">
-                <textarea
-                  value={form.additional_notes}
-                  onChange={e => setField('additional_notes', e.target.value)}
-                  className="input min-h-[80px] resize-y"
-                  placeholder="Free text"
-                />
-              </Field>
             </div>
           </section>
 
