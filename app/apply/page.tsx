@@ -260,46 +260,27 @@ function TopicRow({
   const isSelected = topic.direction !== null
 
   return (
-    <div className={`border rounded-lg p-4 transition-colors ${isSelected ? 'border-[#0f1f3d] bg-white' : 'border-black/10 bg-white/60'}`}>
-      <div className="flex items-start gap-3">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={e => onChange(e.target.checked ? 'figuring_this_out' : null)}
-          className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#0f1f3d] cursor-pointer"
-          id={`topic-${topic.id}`}
-        />
-        <div className="flex-1 min-w-0">
-          <label htmlFor={`topic-${topic.id}`} className="text-sm font-medium text-[#1a1a2e] cursor-pointer">
-            {topic.name}
-          </label>
-          {isSelected && (
-            <div className="flex gap-3 mt-2">
-              <button
-                type="button"
-                onClick={() => onChange('been_through_this')}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                  topic.direction === 'been_through_this'
-                    ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]'
-                    : 'text-[#6b7280] border-black/20 hover:border-[#0f1f3d]'
-                }`}
-              >
-                I've been through this
-              </button>
-              <button
-                type="button"
-                onClick={() => onChange('figuring_this_out')}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                  topic.direction === 'figuring_this_out'
-                    ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]'
-                    : 'text-[#6b7280] border-black/20 hover:border-[#0f1f3d]'
-                }`}
-              >
-                I'm figuring this out
-              </button>
-            </div>
-          )}
-        </div>
+    <div className="border border-black/10 bg-white rounded-lg p-4">
+      <p className="text-sm font-medium text-[#1a1a2e] mb-3">{topic.name}</p>
+      <div className="flex flex-wrap gap-2">
+        {([
+          { value: 'been_through_this', label: "I've been through this" },
+          { value: 'figuring_this_out', label: "I'm figuring this out" },
+          { value: null, label: "Not a topic for me" },
+        ] as const).map(opt => (
+          <button
+            key={opt.label}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+              topic.direction === opt.value
+                ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]'
+                : 'text-[#6b7280] border-black/20 hover:border-[#0f1f3d]'
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
     </div>
   )
