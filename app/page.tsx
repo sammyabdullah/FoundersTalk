@@ -61,7 +61,7 @@ export default function Home() {
             Founders talk<br />to founders.
           </h1>
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
-            FounderTalk matches B2B SaaS founders for one-on-one conversations based on shared experience and where you're headed. No pitch decks. No panels. Just useful conversations with people who've been where you are.
+            Every founder has questions they can't ask their board, their team, or their investors. FounderTalk connects you with a founder who's already lived through it. Anonymous and free.
           </p>
           <Link
             href="/apply"
