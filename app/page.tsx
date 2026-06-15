@@ -32,20 +32,7 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col lg:flex-row items-start justify-center gap-16 px-8 py-16 max-w-6xl mx-auto w-full">
 
-        {/* Left — topics */}
-        <div className="w-full lg:w-72 shrink-0">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Topics covered</p>
-          <ul className="space-y-2">
-            {TOPICS.map(topic => (
-              <li key={topic} className="flex items-start gap-2 text-sm text-white/70">
-                <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 shrink-0" />
-                {topic}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Right — hero */}
+        {/* Left — hero */}
         <div className="flex-1">
           <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight leading-tight mb-8">
             Founders talk<br />to founders.
@@ -59,6 +46,19 @@ export default function Home() {
           >
             Apply to Join
           </Link>
+        </div>
+
+        {/* Right — topics */}
+        <div className="w-full lg:w-72 shrink-0">
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Topics covered</p>
+          <ul className="space-y-2">
+            {TOPICS.map(topic => (
+              <li key={topic} className="flex items-start gap-2 text-sm text-white/70">
+                <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 shrink-0" />
+                {topic}
+              </li>
+            ))}
+          </ul>
         </div>
 
       </main>
