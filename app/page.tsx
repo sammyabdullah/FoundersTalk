@@ -49,7 +49,7 @@ export default function Home() {
         </div>
 
         {/* Right — topics */}
-        <div className="w-full lg:w-72 shrink-0">
+        <div className="w-full lg:w-72 shrink-0 order-last lg:order-none">
           <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Topics covered</p>
           <ul className="space-y-2">
             {TOPICS.map(topic => (
