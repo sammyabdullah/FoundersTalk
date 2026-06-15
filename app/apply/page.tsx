@@ -192,7 +192,7 @@ export default function ApplyPage() {
           {/* Section 2 */}
           <section>
             <h2 className="text-xs font-semibold uppercase tracking-widest text-[#6b7280] mb-2">Section 2 — Your Experience</h2>
-            <p className="text-sm text-[#6b7280] mb-6">Select any topics relevant to you and whether you've been through it or are figuring it out now. Select at least one.</p>
+            <p className="text-sm text-[#6b7280] mb-6">Select any topics relevant to you and whether you've been through it, are figuring it out, or not a relevant topic for you. For topics you've been through, you'll be matched with those still figuring it out, and vice versa.</p>
             <div className="space-y-3">
               {topics.map(topic => (
                 <TopicRow
