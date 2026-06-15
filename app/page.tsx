@@ -61,7 +61,7 @@ export default function Home() {
             Founders talk<br />to founders.
           </h1>
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
-            Every founder has questions they can't ask their board, their team, or their investors. FounderTalk connects you with a founder who's already lived through it. Anonymous and free.
+            Every founder has questions they can't ask their board, their team, or their investors. FounderTalk connects you with a founder who's already lived through it.<br /><br />Anonymous and free.
           </p>
           <Link
             href="/apply"
