@@ -1,13 +1,13 @@
 import { Resend } from 'resend'
-import { Founder, Match, Topic, ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS } from './types'
+import { Founder, Topic, ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS } from './types'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.FROM_EMAIL || 'hello@founderstalk.com'
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://founderstalk.com'
+function getResend() { return new Resend(process.env.RESEND_API_KEY) }
+function FROM() { return process.env.FROM_EMAIL || 'hello@founderstalk.com' }
+function BASE_URL() { return process.env.NEXT_PUBLIC_BASE_URL || 'https://founderstalk.com' }
 
 export async function sendApplicationConfirmation(founder: Founder) {
-  await resend.emails.send({
-    from: `Sammy at FoundersTalk <${FROM}>`,
+  await getResend().emails.send({
+    from: `Sammy at FoundersTalk <${FROM()}>`,
     to: founder.email,
     subject: "You're on the list",
     html: `
@@ -21,8 +21,8 @@ export async function sendApplicationConfirmation(founder: Founder) {
 export async function sendAdminNotification(founder: Founder, topics: Array<{ name: string; direction: string }>) {
   const topicLines = topics.map(t => `• ${t.name} — ${t.direction === 'been_through_this' ? "I've been through this" : "I'm figuring this out"}`).join('\n')
 
-  await resend.emails.send({
-    from: `FoundersTalk <${FROM}>`,
+  await getResend().emails.send({
+    from: `FoundersTalk <${FROM()}>`,
     to: 'sammy@blossomstreetventures.com',
     subject: `New FoundersTalk application — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
     html: `
@@ -39,14 +39,14 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
       <p><strong>Additional notes:</strong><br>${founder.additional_notes || '—'}</p>
       <h3>Topics</h3>
       <pre>${topicLines}</pre>
-      <p><a href="${BASE_URL}/admin">Review in admin →</a></p>
+      <p><a href="${BASE_URL()}/admin">Review in admin →</a></p>
     `,
   })
 }
 
 export async function sendWelcomeEmail(founder: Founder) {
-  await resend.emails.send({
-    from: `Sammy <${FROM}>`,
+  await getResend().emails.send({
+    from: `Sammy <${FROM()}>`,
     to: founder.email,
     subject: "You're in — FoundersTalk",
     html: `
@@ -66,10 +66,10 @@ export async function sendMatchEmail(
   token: string
 ) {
   const directionLabel = otherDirection === 'been_through_this' ? "has been through this" : "is figuring this out"
-  const responseUrl = `${BASE_URL}/match/${token}`
+  const responseUrl = `${BASE_URL()}/match/${token}`
 
-  await resend.emails.send({
-    from: `Sammy at FoundersTalk <${FROM}>`,
+  await getResend().emails.send({
+    from: `Sammy at FoundersTalk <${FROM()}>`,
     to: recipient.email,
     subject: 'A founder wants to talk to you',
     html: `
@@ -105,13 +105,11 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
     <p>Sammy</p>
   `
 
-  await Promise.all([
-    resend.emails.send({
-      from: `Sammy <${FROM}>`,
-      to: founderA.email,
-      cc: founderB.email,
-      subject: `Meet ${nameB}`,
-      html: body,
-    }),
-  ])
+  await getResend().emails.send({
+    from: `Sammy <${FROM()}>`,
+    to: founderA.email,
+    cc: founderB.email,
+    subject: `Meet ${nameB}`,
+    html: body,
+  })
 }
