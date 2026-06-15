@@ -271,8 +271,8 @@ function TopicRow({
       <p className="text-sm font-medium text-[#1a1a2e] mb-3">{topic.name}</p>
       <div className="flex flex-wrap gap-2">
         {([
-          { value: 'been_through_this', label: "I've been through this" },
-          { value: 'figuring_this_out', label: "I'm figuring this out" },
+          { value: 'been_through_this', label: "I can help with this" },
+          { value: 'figuring_this_out', label: "I could use help here" },
           { value: null, label: "Not a topic for me" },
         ] as const).map(opt => (
           <button
