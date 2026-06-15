@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Nav from '@/components/Nav'
 
 const TOPICS = [
   'Fundraising (Seed)',
@@ -28,17 +28,7 @@ const TOPICS = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0f1f3d] text-white flex flex-col">
-      <nav className="px-8 py-6 flex items-center gap-3">
-        <Image
-          src="/logo.jpg"
-          alt="FounderTalk logo"
-          width={36}
-          height={36}
-          className="rounded-sm"
-          style={{ mixBlendMode: 'screen' }}
-        />
-        <span className="text-xl font-semibold tracking-tight">FounderTalk</span>
-      </nav>
+      <Nav dark />
 
       <main className="flex-1 flex flex-col lg:flex-row items-start justify-center gap-16 px-8 py-16 max-w-6xl mx-auto w-full">
 

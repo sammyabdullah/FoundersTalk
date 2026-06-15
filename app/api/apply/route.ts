@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendApplicationConfirmation, sendAdminNotification } from '@/lib/emails'
+import { hashPassword } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
@@ -8,16 +9,22 @@ export async function POST(req: NextRequest) {
   const {
     email, arr_bucket, business_model, customer_type, vertical,
     geography, company_description, open_to_share, first_name,
-    additional_notes, topics,
+    additional_notes, topics, password,
   } = body
 
   if (!email || !arr_bucket || !business_model || !customer_type || !geography || !company_description) {
     return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
   }
 
+  if (!password || password.length < 6) {
+    return NextResponse.json({ error: 'Password must be at least 6 characters.' }, { status: 400 })
+  }
+
   if (!topics || topics.length === 0) {
     return NextResponse.json({ error: 'Select at least one topic.' }, { status: 400 })
   }
+
+  const password_hash = await hashPassword(password)
 
   const { data: founder, error: founderErr } = await supabaseAdmin
     .from('founders')
@@ -32,6 +39,7 @@ export async function POST(req: NextRequest) {
       open_to_share: open_to_share || null,
       first_name: first_name || null,
       additional_notes: additional_notes || null,
+      password_hash,
       status: 'pending',
     })
     .select()
@@ -44,7 +52,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: founderErr.message }, { status: 500 })
   }
 
-  // Insert founder_topics
   await supabaseAdmin.from('founder_topics').insert(
     topics.map((t: { id: string; direction: string }) => ({
       founder_id: founder.id,
@@ -53,7 +60,6 @@ export async function POST(req: NextRequest) {
     }))
   )
 
-  // Fetch topic names for admin email
   const { data: topicData } = await supabaseAdmin
     .from('topics')
     .select('id, name')
@@ -64,7 +70,6 @@ export async function POST(req: NextRequest) {
     direction: t.direction,
   }))
 
-  // Fire emails (don't block on failure)
   try {
     await sendApplicationConfirmation(founder)
     await sendAdminNotification(founder, topicsWithDirection)

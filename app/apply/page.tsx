@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import Nav from '@/components/Nav'
 import { ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS } from '@/lib/types'
 
 interface TopicChoice {
@@ -20,6 +19,7 @@ export default function ApplyPage() {
 
   const [form, setForm] = useState({
     email: '',
+    password: '',
     arr_bucket: '',
     business_model: '',
     customer_type: '',
@@ -75,12 +75,7 @@ export default function ApplyPage() {
   if (submitState === 'success') {
     return (
       <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
-        <nav className="px-8 py-6 border-b border-black/5">
-          <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
-            <Image src="/logo.jpg" alt="FounderTalk logo" width={32} height={32} className="rounded-sm" />
-            FounderTalk
-          </Link>
-        </nav>
+        <Nav />
         <div className="flex-1 flex items-center justify-center px-8">
           <div className="max-w-md text-center">
             <h1 className="text-3xl font-semibold text-[#0f1f3d] mb-4">You're on the list.</h1>
@@ -95,12 +90,7 @@ export default function ApplyPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
-      <nav className="px-8 py-6 border-b border-black/5">
-        <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
-            <Image src="/logo.jpg" alt="FounderTalk logo" width={32} height={32} className="rounded-sm" />
-            FounderTalk
-          </Link>
-      </nav>
+      <Nav />
 
       <main className="flex-1 px-8 py-12 max-w-2xl mx-auto w-full">
         <h1 className="text-3xl font-semibold text-[#0f1f3d] mb-2">Anonymous Application</h1>
@@ -119,6 +109,18 @@ export default function ApplyPage() {
                   onChange={e => setField('email', e.target.value)}
                   className="input"
                   placeholder="you@company.com"
+                />
+              </Field>
+
+              <Field label="Password" required hint="You'll use this to log in and manage your profile">
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={form.password}
+                  onChange={e => setField('password', e.target.value)}
+                  className="input"
+                  placeholder="At least 6 characters"
                 />
               </Field>
 
