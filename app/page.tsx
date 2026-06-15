@@ -28,9 +28,13 @@ const TOPICS = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0f1f3d] text-white flex flex-col">
-      <Nav dark />
 
-      <main className="flex-1 flex flex-col lg:flex-row items-start justify-center gap-16 px-8 py-16 max-w-6xl mx-auto w-full">
+      {/* Nav — aligned to same container as content */}
+      <div className="w-full max-w-6xl mx-auto px-8 pt-6 pb-0">
+        <Nav dark />
+      </div>
+
+      <main className="flex-1 flex flex-col lg:flex-row items-start gap-16 px-8 py-16 max-w-6xl mx-auto w-full">
 
         {/* Left — hero */}
         <div className="flex-1">
@@ -63,10 +67,14 @@ export default function Home() {
 
       </main>
 
-      <footer className="px-8 py-6 text-white/40 text-sm">
-        <p>© {new Date().getFullYear()} FounderTalk</p>
-        <p className="mt-1">Built for founders by Blossom Street Ventures. Contact us at <a href="mailto:sammy@blossomstreetventures.com" className="underline hover:text-white/60 transition-colors">sammy@blossomstreetventures.com</a></p>
-      </footer>
+      {/* Footer — aligned to same container as content */}
+      <div className="w-full max-w-6xl mx-auto px-8">
+        <footer className="py-6 text-white/40 text-sm border-t border-white/10">
+          <p>© {new Date().getFullYear()} FounderTalk</p>
+          <p className="mt-1">Built for founders by Blossom Street Ventures. Contact us at <a href="mailto:sammy@blossomstreetventures.com" className="underline hover:text-white/60 transition-colors">sammy@blossomstreetventures.com</a></p>
+        </footer>
+      </div>
+
     </div>
   )
 }

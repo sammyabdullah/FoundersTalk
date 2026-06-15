@@ -15,7 +15,7 @@ export default function Nav({ dark = false }: { dark?: boolean }) {
   const mutedCls = dark ? 'text-white/60 hover:text-white' : 'text-[#6b7280] hover:text-[#1a1a2e]'
 
   return (
-    <nav className={`px-8 py-6 flex items-center justify-between ${dark ? '' : 'border-b border-black/5'}`}>
+    <nav className={`py-6 flex items-center justify-between ${dark ? '' : 'px-8 border-b border-black/5'}`}>
       <Link href="/" className={`flex items-center gap-2 text-xl font-semibold tracking-tight ${textCls}`}>
         <Image
           src="/logo.jpg"
