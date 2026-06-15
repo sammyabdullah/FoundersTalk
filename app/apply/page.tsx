@@ -142,14 +142,19 @@ export default function ApplyPage() {
                 </select>
               </Field>
 
-              <Field label="Vertical focus" hint="Optional">
-                <input
-                  type="text"
-                  value={form.vertical}
-                  onChange={e => setField('vertical', e.target.value)}
-                  className="input"
-                  placeholder="e.g. fintech, HR tech, dev tools — leave blank if horizontal"
-                />
+              <Field label="Product category" hint="Optional">
+                <div className="flex flex-wrap gap-2">
+                  {['iPaaS','Vertical SaaS','DevTools','Security','Data & Analytics','HR Tech','FinTech','MarTech','RevOps','Ed Tech','Healthcare','Other'].map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setField('vertical', form.vertical === v ? '' : v)}
+                      className={`px-3 py-1.5 rounded-md border text-sm transition-colors ${form.vertical === v ? 'bg-[#0f1f3d] text-white border-[#0f1f3d]' : 'bg-white text-[#1a1a2e] border-black/20 hover:border-[#0f1f3d]'}`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
               </Field>
 
               <Field label="Geography" required>
