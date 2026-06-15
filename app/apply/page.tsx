@@ -85,7 +85,7 @@ export default function ApplyPage() {
           <div className="max-w-md text-center">
             <h1 className="text-3xl font-semibold text-[#0f1f3d] mb-4">You're on the list.</h1>
             <p className="text-[#6b7280] leading-relaxed">
-              Thanks for applying. We review every application personally and will be in touch shortly.
+              Thank you. We'll match you with other founders and ask for your opt-in before any intros are made.
             </p>
           </div>
         </div>
