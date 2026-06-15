@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS } from '@/lib/types'
 
 interface TopicChoice {
@@ -75,7 +76,10 @@ export default function ApplyPage() {
     return (
       <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
         <nav className="px-8 py-6 border-b border-black/5">
-          <Link href="/" className="text-xl font-semibold tracking-tight text-[#0f1f3d]">FoundersTalk</Link>
+          <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
+            <Image src="/logo.jpg" alt="FoundersTalk logo" width={32} height={32} className="rounded-sm" />
+            FoundersTalk
+          </Link>
         </nav>
         <div className="flex-1 flex items-center justify-center px-8">
           <div className="max-w-md text-center">
@@ -92,7 +96,10 @@ export default function ApplyPage() {
   return (
     <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
       <nav className="px-8 py-6 border-b border-black/5">
-        <Link href="/" className="text-xl font-semibold tracking-tight text-[#0f1f3d]">FoundersTalk</Link>
+        <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
+            <Image src="/logo.jpg" alt="FoundersTalk logo" width={32} height={32} className="rounded-sm" />
+            FoundersTalk
+          </Link>
       </nav>
 
       <main className="flex-1 px-8 py-12 max-w-2xl mx-auto w-full">

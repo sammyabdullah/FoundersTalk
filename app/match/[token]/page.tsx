@@ -136,7 +136,10 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f8f6f1] flex flex-col">
       <nav className="px-8 py-6 border-b border-black/5">
-        <Link href="/" className="text-xl font-semibold tracking-tight text-[#0f1f3d]">FoundersTalk</Link>
+        <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
+          <img src="/logo.jpg" alt="" width={32} height={32} className="rounded-sm" />
+          FoundersTalk
+        </Link>
       </nav>
       <main className="flex-1 flex flex-col items-center justify-center px-8 py-12">
         {children}
