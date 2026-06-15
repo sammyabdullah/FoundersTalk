@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const TOPICS = [
   'Fundraising (Seed)',
@@ -27,7 +28,15 @@ const TOPICS = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0f1f3d] text-white flex flex-col">
-      <nav className="px-8 py-6">
+      <nav className="px-8 py-6 flex items-center gap-3">
+        <Image
+          src="/logo.jpg"
+          alt="FoundersTalk logo"
+          width={36}
+          height={36}
+          className="rounded-sm"
+          style={{ mixBlendMode: 'screen' }}
+        />
         <span className="text-xl font-semibold tracking-tight">FoundersTalk</span>
       </nav>
 
