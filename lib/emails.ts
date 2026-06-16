@@ -123,3 +123,18 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
     }),
   ])
 }
+
+export async function sendPasswordResetEmail(founder: { email: string; first_name?: string | null }, token: string) {
+  const resetUrl = `${BASE_URL()}/reset-password/${token}`
+  await getResend().emails.send({
+    from: `Sammy at FounderTalk <${FROM()}>`,
+    to: founder.email,
+    subject: 'Reset your FounderTalk password',
+    html: `
+      <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
+      <p>We received a request to reset your password. Click the link below — it expires in 1 hour.</p>
+      <p><a href="${resetUrl}" style="background:#1e3a5f;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin:8px 0;">Reset my password</a></p>
+      <p style="font-size:12px;color:#999;">If you didn't request this, you can ignore this email.</p>
+    `,
+  })
+}
