@@ -48,7 +48,7 @@ export default function Home() {
             href="/apply"
             className="inline-block bg-white text-[#0f1f3d] font-medium px-8 py-4 rounded-lg hover:bg-white/90 transition-colors"
           >
-            Apply to Join
+            Join
           </Link>
         </div>
 
