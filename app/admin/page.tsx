@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS, Founder, Match } from '@/lib/types'
 
@@ -14,6 +14,10 @@ interface ProposedMatch {
 }
 
 export default function AdminPage() {
+  return <Suspense><AdminPageInner /></Suspense>
+}
+
+function AdminPageInner() {
   const [authed, setAuthed] = useState(false)
   const [password, setPassword] = useState('')
   const searchParams = useSearchParams()
