@@ -9,10 +9,12 @@ export async function sendApplicationConfirmation(founder: Founder) {
   await getResend().emails.send({
     from: `Sammy at FounderTalk <${FROM()}>`,
     to: founder.email,
-    subject: "You're on the list",
+    subject: "Welcome to FounderTalk",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Thanks for applying to FounderTalk. We review every application personally — you'll hear from us shortly.</p>
+      <p>Welcome to FounderTalk. Your profile is live and we'll be in touch when we find a good match — we'll always ask for your opt-in before any intro is made.</p>
+      <p>In the meantime, you can log in any time to update your profile, change your topics, or review your match history.</p>
+      <p><a href="${BASE_URL()}/login">Log in to your profile →</a></p>
       <p>Sammy</p>
     `,
   })
