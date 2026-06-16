@@ -56,7 +56,7 @@ export default function Home() {
 
         {/* Right — topics */}
         <div className="w-full lg:w-72 shrink-0 order-last lg:order-none">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Topics covered</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Topics</p>
           <ul className="space-y-2">
             {TOPICS.map(topic => (
               <li key={topic} className="flex items-start gap-2 text-sm text-white/70">
