@@ -100,18 +100,25 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
   const nameA = founderA.first_name || 'there'
   const nameB = founderB.first_name || 'there'
 
-  const body = `
-    <p>Hi ${nameA}, meet ${nameB}. ${nameB.charAt(0).toUpperCase() + nameB.slice(1)}, meet ${nameA.charAt(0).toUpperCase() + nameA.slice(1)}.</p>
-    <p>You both wanted to connect about <strong>${topic.name}</strong>. We'll leave it here — take it wherever is most useful.</p>
-    <p>${nameA}: ${founderA.email}<br>${nameB}: ${founderB.email}</p>
+  const emailTo = (recipient: string, recipientName: string, otherName: string, otherEmail: string) => `
+    <p>Hi ${recipientName},</p>
+    <p>You both opted in to connect about <strong>${topic.name}</strong>. Here's their email — take it from here.</p>
+    <p><strong>${otherName}:</strong> ${otherEmail}</p>
     <p>Sammy</p>
   `
 
-  await getResend().emails.send({
-    from: `Sammy <${FROM()}>`,
-    to: founderA.email,
-    cc: founderB.email,
-    subject: `Meet ${nameB}`,
-    html: body,
-  })
+  await Promise.all([
+    getResend().emails.send({
+      from: `Sammy <${FROM()}>`,
+      to: founderA.email,
+      subject: `Your intro — ${nameB}`,
+      html: emailTo(founderA.email, nameA, nameB, founderB.email),
+    }),
+    getResend().emails.send({
+      from: `Sammy <${FROM()}>`,
+      to: founderB.email,
+      subject: `Your intro — ${nameA}`,
+      html: emailTo(founderB.email, nameB, nameA, founderA.email),
+    }),
+  ])
 }
