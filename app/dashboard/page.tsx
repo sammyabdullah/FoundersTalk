@@ -206,6 +206,25 @@ export default function DashboardPage() {
             </div>
 
             <div className="border-t border-black/10 pt-6 mt-6">
+              <p className="text-sm font-medium text-[#1a1a2e] mb-1">Pause matching</p>
+              <p className="text-sm text-[#6b7280] mb-4">While paused, you won't be considered for new matches or receive opt-in emails. You can resume at any time.</p>
+              <button
+                onClick={async () => {
+                  const currentStatus = data?.founder.status
+                  const newStatus = currentStatus === 'paused' ? 'active' : 'paused'
+                  const res = await fetch('/api/founder/me', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus }) })
+                  if (res.ok) { await load() }
+                }}
+                className={`text-sm px-4 py-2 rounded-lg border transition-colors ${data?.founder.status === 'paused' ? 'bg-[#0f1f3d] text-white border-[#0f1f3d] hover:bg-[#1e3a5f]' : 'text-[#6b7280] border-black/20 hover:border-[#0f1f3d]'}`}
+              >
+                {data?.founder.status === 'paused' ? 'Resume matching' : 'Pause matching'}
+              </button>
+              {data?.founder.status === 'paused' && (
+                <p className="text-xs text-amber-600 mt-2">Your profile is currently paused.</p>
+              )}
+            </div>
+
+            <div className="border-t border-black/10 pt-6 mt-6">
               <p className="text-sm font-medium text-red-600 mb-1">Delete account</p>
               <p className="text-sm text-[#6b7280] mb-4">This permanently deletes your profile and all match history. This cannot be undone.</p>
               {!deleteConfirm ? (
