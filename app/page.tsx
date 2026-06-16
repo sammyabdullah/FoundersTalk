@@ -70,8 +70,7 @@ export default function Home() {
       {/* Footer — aligned to same container as content */}
       <div className="w-full max-w-6xl mx-auto px-8">
         <footer className="py-6 text-white/40 text-sm border-t border-white/10">
-          <p>© {new Date().getFullYear()} FounderTalk</p>
-          <p className="mt-1">Built for founders by Blossom Street Ventures. Contact us at <a href="mailto:sammy@blossomstreetventures.com" className="underline hover:text-white/60 transition-colors">sammy@blossomstreetventures.com</a></p>
+          <p>Built for founders by Blossom Street Ventures. Contact us at <a href="mailto:sammy@blossomstreetventures.com" className="underline hover:text-white/60 transition-colors">sammy@blossomstreetventures.com</a></p>
         </footer>
       </div>
 
