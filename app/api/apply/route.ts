@@ -70,12 +70,14 @@ export async function POST(req: NextRequest) {
     direction: t.direction,
   }))
 
+  let emailError: string | null = null
   try {
     await sendApplicationConfirmation(founder)
     await sendAdminNotification(founder, topicsWithDirection)
-  } catch (e) {
+  } catch (e: any) {
     console.error('Email error:', e)
+    emailError = e?.message ?? 'Unknown email error'
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, emailError })
 }

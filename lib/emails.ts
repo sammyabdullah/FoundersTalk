@@ -12,8 +12,9 @@ export async function sendApplicationConfirmation(founder: Founder) {
     subject: "Welcome to FounderTalk",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Welcome to FounderTalk. Your profile is live and we'll be in touch when we find a good match — we'll always ask for your opt-in before any intro is made.</p>
-      <p>In the meantime, you can log in any time to update your profile, change your topics, or review your match history.</p>
+      <p>Welcome to FounderTalk. Your profile is live.</p>
+      <p>When we find a good match we'll send you an email with their profile and ask if you'd like an intro — we'll always get your opt-in before making any introduction.</p>
+      <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account.</p>
       <p><a href="${BASE_URL()}/login">Log in to your profile →</a></p>
       <p>Sammy</p>
     `,

@@ -63,10 +63,11 @@ export default function ApplyPage() {
       body: JSON.stringify({ ...form, topics: selectedTopics.map(t => ({ id: t.id, direction: t.direction })) }),
     })
 
+    const data = await res.json()
     if (res.ok) {
+      if (data.emailError) console.error('Email send failed:', data.emailError)
       setSubmitState('success')
     } else {
-      const data = await res.json()
       setErrorMsg(data.error || 'Something went wrong. Please try again.')
       setSubmitState('error')
     }
