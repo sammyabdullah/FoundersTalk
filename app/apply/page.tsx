@@ -34,7 +34,11 @@ export default function ApplyPage() {
   useEffect(() => {
     fetch('/api/topics')
       .then(r => r.json())
-      .then(data => setTopics(data.map((t: { id: string; name: string }) => ({ ...t, direction: null }))))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTopics(data.map((t: { id: string; name: string }) => ({ ...t, direction: null })))
+        }
+      })
   }, [])
 
   function setField(key: string, value: string) {
