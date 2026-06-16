@@ -27,16 +27,16 @@ export default function Nav({ dark = false }: { dark?: boolean }) {
         />
         FounderTalk
       </Link>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {loggedIn ? (
           <Link href="/dashboard" className={`text-sm font-medium transition-colors ${mutedCls}`}>
             Dashboard
           </Link>
-        ) : (
+        ) : !dark ? (
           <Link href="/login" className={`text-sm font-medium transition-colors ${mutedCls}`}>
             Sign in
           </Link>
-        )}
+        ) : null}
       </div>
     </nav>
   )

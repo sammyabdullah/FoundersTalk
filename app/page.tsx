@@ -44,12 +44,14 @@ export default function Home() {
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
             Every founder has questions they can't ask their board, their team, or their investors. FounderTalk connects you with a founder who's already lived through it.<br /><br />Anonymous and free.
           </p>
-          <Link
-            href="/apply"
-            className="inline-block bg-white text-[#0f1f3d] font-medium px-8 py-4 rounded-lg hover:bg-white/90 transition-colors"
-          >
-            Join
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/apply" className="inline-block bg-white text-[#0f1f3d] font-medium px-8 py-4 rounded-lg hover:bg-white/90 transition-colors">
+              Join
+            </Link>
+            <Link href="/login" className="inline-block bg-white/15 text-white font-medium px-8 py-4 rounded-lg hover:bg-white/25 transition-colors border border-white/20">
+              Sign in
+            </Link>
+          </div>
         </div>
 
         {/* Right — topics */}
