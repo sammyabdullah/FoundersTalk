@@ -18,15 +18,22 @@ export async function POST(req: NextRequest) {
   const token = crypto.randomUUID()
   const expires = new Date(Date.now() + 1000 * 60 * 60).toISOString() // 1 hour
 
-  await supabaseAdmin
+  const { error: updateError } = await supabaseAdmin
     .from('founders')
     .update({ reset_token: token, reset_token_expires: expires })
     .eq('id', founder.id)
 
+  if (updateError) {
+    console.error('Reset token update error:', updateError)
+    // Likely migration not run yet — columns don't exist
+    return NextResponse.json({ ok: true, _debug: updateError.message })
+  }
+
   try {
     await sendPasswordResetEmail(founder, token)
-  } catch (e) {
+  } catch (e: any) {
     console.error('Reset email error:', e)
+    return NextResponse.json({ ok: true, _debug: e?.message ?? 'email send failed' })
   }
 
   return NextResponse.json({ ok: true })
