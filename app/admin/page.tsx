@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS, Founder, Match } from '@/lib/types'
 
-type Tab = 'pending' | 'founders' | 'matches'
+type Tab = 'signups' | 'founders' | 'matches'
 
 interface ProposedMatch {
   founderA: Founder
@@ -15,7 +16,8 @@ interface ProposedMatch {
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false)
   const [password, setPassword] = useState('')
-  const [tab, setTab] = useState<Tab>('pending')
+  const searchParams = useSearchParams()
+  const [tab, setTab] = useState<Tab>((searchParams.get('tab') as Tab) || 'signups')
 
   function login(e: React.FormEvent) {
     e.preventDefault()
@@ -49,19 +51,19 @@ export default function AdminPage() {
     <div className="min-h-screen bg-[#f8f6f1]">
       <nav className="bg-[#0f1f3d] px-8 py-4 flex items-center gap-8">
         <span className="text-white font-semibold">FounderTalk Admin</span>
-        {(['pending', 'founders', 'matches'] as Tab[]).map(t => (
+        {(['signups', 'founders', 'matches'] as Tab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`text-sm font-medium transition-colors ${tab === t ? 'text-white' : 'text-white/50 hover:text-white/80'}`}
           >
-            {t === 'pending' ? 'Pending Approvals' : t === 'founders' ? 'Founder Database' : 'Matches'}
+            {t === 'signups' ? 'Sign Ups' : t === 'founders' ? 'Founder Database' : 'Matches'}
           </button>
         ))}
       </nav>
 
       <main className="px-8 py-8 max-w-6xl mx-auto">
-        {tab === 'pending' && <PendingTab headers={headers} />}
+        {tab === 'signups' && <PendingTab headers={headers} />}
         {tab === 'founders' && <FoundersTab headers={headers} />}
         {tab === 'matches' && <MatchesTab headers={headers} />}
       </main>
@@ -92,11 +94,11 @@ function PendingTab({ headers }: { headers: Record<string, string> }) {
   }
 
   if (loading) return <p className="text-[#6b7280]">Loading…</p>
-  if (founders.length === 0) return <p className="text-[#6b7280]">No pending applications.</p>
+  if (founders.length === 0) return <p className="text-[#6b7280]">No new sign ups.</p>
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-[#0f1f3d]">Pending Approvals ({founders.length})</h2>
+      <h2 className="text-lg font-semibold text-[#0f1f3d]">New Sign Ups ({founders.length})</h2>
       {founders.map(f => (
         <div key={f.id} className="bg-white border border-black/10 rounded-xl p-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -309,29 +311,61 @@ function MatchesTab({ headers }: { headers: Record<string, string> }) {
         </div>
       )}
 
-      <div>
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-[#6b7280] mb-4">Sent Matches ({sentMatches.length})</h3>
-        {sentMatches.length === 0 ? (
-          <p className="text-sm text-[#6b7280]">No matches sent yet.</p>
-        ) : (
-          <div className="space-y-3">
-            {sentMatches.map((m: any) => (
-              <div key={m.id} className="bg-white border border-black/10 rounded-xl px-5 py-4">
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <div className="text-sm">
-                    <span className="font-medium text-[#0f1f3d]">{m.founders_a?.email}</span>
-                    <span className="text-[#6b7280] mx-2">↔</span>
-                    <span className="font-medium text-[#0f1f3d]">{m.founders_b?.email}</span>
-                    <span className="text-[#6b7280] ml-2">· {m.topics?.name}</span>
-                  </div>
-                  <StatusBadge status={m.status} />
+      {(() => {
+        const connections = sentMatches.filter((m: any) => m.status === 'both_accepted')
+        const pending = sentMatches.filter((m: any) => m.status !== 'both_accepted')
+        return (
+          <>
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-[#6b7280] mb-4">Connections Made ({connections.length})</h3>
+              {connections.length === 0 ? (
+                <p className="text-sm text-[#6b7280]">No connections yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {connections.map((m: any) => (
+                    <div key={m.id} className="bg-white border border-green-200 rounded-xl px-5 py-4">
+                      <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div className="text-sm">
+                          <span className="font-medium text-[#0f1f3d]">{m.founders_a?.email}</span>
+                          <span className="text-[#6b7280] mx-2">↔</span>
+                          <span className="font-medium text-[#0f1f3d]">{m.founders_b?.email}</span>
+                          <span className="text-[#6b7280] ml-2">· {m.topics?.name}</span>
+                        </div>
+                        <span className="text-xs px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-green-700">Intro sent</span>
+                      </div>
+                      <p className="text-xs text-[#6b7280] mt-1">Connected {m.intro_sent_at ? new Date(m.intro_sent_at).toLocaleDateString() : new Date(m.matched_at).toLocaleDateString()}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-xs text-[#6b7280] mt-1">Sent {new Date(m.matched_at).toLocaleDateString()} · Expires {new Date(m.expires_at).toLocaleDateString()}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-[#6b7280] mb-4">Awaiting Response ({pending.length})</h3>
+              {pending.length === 0 ? (
+                <p className="text-sm text-[#6b7280]">No pending opt-ins.</p>
+              ) : (
+                <div className="space-y-3">
+                  {pending.map((m: any) => (
+                    <div key={m.id} className="bg-white border border-black/10 rounded-xl px-5 py-4">
+                      <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div className="text-sm">
+                          <span className="font-medium text-[#0f1f3d]">{m.founders_a?.email}</span>
+                          <span className="text-[#6b7280] mx-2">↔</span>
+                          <span className="font-medium text-[#0f1f3d]">{m.founders_b?.email}</span>
+                          <span className="text-[#6b7280] ml-2">· {m.topics?.name}</span>
+                        </div>
+                        <StatusBadge status={m.status} />
+                      </div>
+                      <p className="text-xs text-[#6b7280] mt-1">Sent {new Date(m.matched_at).toLocaleDateString()} · Expires {new Date(m.expires_at).toLocaleDateString()}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )
+      })()}
     </div>
   )
 }

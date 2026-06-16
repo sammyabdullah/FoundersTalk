@@ -42,7 +42,7 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
       <p><strong>Additional notes:</strong><br>${founder.additional_notes || '—'}</p>
       <h3>Topics</h3>
       <pre>${topicLines}</pre>
-      <p><a href="${BASE_URL()}/admin">Review in admin →</a></p>
+      <p><a href="${BASE_URL()}/admin?tab=signups">Review in admin →</a></p>
     `,
   })
 }
