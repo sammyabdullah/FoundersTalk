@@ -10,10 +10,6 @@ interface ProposedMatch {
   founderB: Founder
   topicId: string
   topicName: string
-  arrOverlap: boolean
-  customerTypeOverlap: boolean
-  verticalOverlap: boolean
-  score: number
 }
 
 export default function AdminPage() {
@@ -290,10 +286,6 @@ function MatchesTab({ headers }: { headers: Record<string, string> }) {
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <Badge label={`Topic: ${p.topicName}`} active />
-                    {p.arrOverlap && <Badge label="ARR overlap" active />}
-                    {p.customerTypeOverlap && <Badge label="Customer type match" active />}
-                    {p.verticalOverlap && <Badge label="Vertical match" active />}
-                    <Badge label={`Score: ${p.score}`} active={p.score >= 4} />
                   </div>
                   <div className="flex gap-2">
                     <button
