@@ -31,6 +31,8 @@ export default function DashboardPage() {
   const [tab, setTab] = useState<Tab>('overview')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [saveMsg, setSaveMsg] = useState('')
 
   const [profileForm, setProfileForm] = useState<Partial<Founder>>({})
@@ -201,6 +203,34 @@ export default function DashboardPage() {
                 {saving ? 'Saving…' : 'Save changes'}
               </button>
               {saveMsg && <p className="text-sm text-green-600">{saveMsg}</p>}
+            </div>
+
+            <div className="border-t border-black/10 pt-6 mt-6">
+              <p className="text-sm font-medium text-red-600 mb-1">Delete account</p>
+              <p className="text-sm text-[#6b7280] mb-4">This permanently deletes your profile and all match history. This cannot be undone.</p>
+              {!deleteConfirm ? (
+                <button onClick={() => setDeleteConfirm(true)} className="text-sm text-red-600 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
+                  Delete my account
+                </button>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={async () => {
+                      setDeleting(true)
+                      const res = await fetch('/api/founder/delete', { method: 'DELETE' })
+                      if (res.ok) { window.location.href = '/' }
+                      else { setDeleting(false); setDeleteConfirm(false) }
+                    }}
+                    disabled={deleting}
+                    className="text-sm bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-60"
+                  >
+                    {deleting ? 'Deleting…' : 'Yes, delete my account'}
+                  </button>
+                  <button onClick={() => setDeleteConfirm(false)} className="text-sm text-[#6b7280] hover:text-[#1a1a2e] transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
