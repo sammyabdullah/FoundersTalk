@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useState, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS, Founder, Match } from '@/lib/types'
 
@@ -49,8 +49,6 @@ function AdminPageInner() {
     )
   }
 
-  const headers = { 'x-admin-token': password }
-
   return (
     <div className="min-h-screen bg-[#f8f6f1]">
       <nav className="bg-[#0f1f3d] px-8 py-4 flex items-center gap-8">
@@ -67,17 +65,18 @@ function AdminPageInner() {
       </nav>
 
       <main className="px-8 py-8 max-w-6xl mx-auto">
-        {tab === 'signups' && <PendingTab headers={headers} />}
-        {tab === 'founders' && <FoundersTab headers={headers} />}
-        {tab === 'matches' && <MatchesTab headers={headers} />}
+        {tab === 'signups' && <PendingTab adminToken={password} />}
+        {tab === 'founders' && <FoundersTab adminToken={password} />}
+        {tab === 'matches' && <MatchesTab adminToken={password} />}
       </main>
     </div>
   )
 }
 
-function PendingTab({ headers }: { headers: Record<string, string> }) {
+function PendingTab({ adminToken }: { adminToken: string }) {
   const [founders, setFounders] = useState<Founder[]>([])
   const [loading, setLoading] = useState(true)
+  const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const load = useCallback(() => {
     setLoading(true)
@@ -132,11 +131,12 @@ function PendingTab({ headers }: { headers: Record<string, string> }) {
   )
 }
 
-function FoundersTab({ headers }: { headers: Record<string, string> }) {
+function FoundersTab({ adminToken }: { adminToken: string }) {
   const [founders, setFounders] = useState<Founder[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<string | null>(null)
   const [topics, setTopics] = useState<Record<string, Array<{ direction: string; topics: { name: string } }>>>({})
+  const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const load = useCallback(() => {
     setLoading(true)
@@ -223,12 +223,13 @@ function FoundersTab({ headers }: { headers: Record<string, string> }) {
   )
 }
 
-function MatchesTab({ headers }: { headers: Record<string, string> }) {
+function MatchesTab({ adminToken }: { adminToken: string }) {
   const [proposed, setProposed] = useState<ProposedMatch[]>([])
   const [sentMatches, setSentMatches] = useState<Match[]>([])
   const [running, setRunning] = useState(false)
   const [sending, setSending] = useState<string | null>(null)
   const [skipped, setSkipped] = useState<Set<string>>(new Set())
+  const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const loadSent = useCallback(() => {
     fetch('/api/admin/matches', { headers })

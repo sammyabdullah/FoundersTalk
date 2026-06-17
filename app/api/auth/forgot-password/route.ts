@@ -26,14 +26,14 @@ export async function POST(req: NextRequest) {
   if (updateError) {
     console.error('Reset token update error:', updateError)
     // Likely migration not run yet — columns don't exist
-    return NextResponse.json({ ok: true, _debug: updateError.message })
+    return NextResponse.json({ ok: true })
   }
 
   try {
     await sendPasswordResetEmail(founder, token)
   } catch (e: any) {
     console.error('Reset email error:', e)
-    return NextResponse.json({ ok: true, _debug: e?.message ?? 'email send failed' })
+    return NextResponse.json({ ok: true })
   }
 
   return NextResponse.json({ ok: true })
