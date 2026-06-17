@@ -7,13 +7,13 @@ function BASE_URL() { return process.env.NEXT_PUBLIC_BASE_URL || 'https://founde
 
 export async function sendApplicationConfirmation(founder: Founder) {
   await getResend().emails.send({
-    from: `Sammy at FounderTalk <${FROM()}>`,
+    from: `FounderTalk <${FROM()}>`,
     to: founder.email,
     subject: "Welcome to FounderTalk",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Welcome to FounderTalk. Your profile has been created. When we find a good match we'll send you an email with their profile and ask if you'd like an intro, we'll always get your opt-in and the other founder's before making any introduction.</p>
-      <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account. If you have questions, reach out to the creators of FounderTalk directly: <a href="mailto:sammy@blossomstreetventures.com">sammy@blossomstreetventures.com</a>.</p>
+      <p>Welcome to FounderTalk and thank you for creating a profile. When we find a founder who matches your topics, we'll send you an email with their profile and ask if you'd like an intro; we'll always get your opt-in and the other founder's opt-in before making any introduction.</p>
+      <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account. If you have questions, reach out to Blossom Street Ventures, who created and sponsor FounderTalk: <a href="mailto:sammy@blossomstreetventures.com">sammy@blossomstreetventures.com</a>.</p>
       <p>We hope you enjoy the service. <a href="${BASE_URL()}/login">Log in to your profile →</a></p>
     `,
   })
@@ -25,7 +25,7 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
   await getResend().emails.send({
     from: `FounderTalk <${FROM()}>`,
     to: 'sammy@blossomstreetventures.com',
-    subject: `New FounderTalk profile — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
+    subject: `New FounderTalk profile — ${ARR_BUCKET_LABELS[founder.arr_bucket] || founder.arr_bucket}`,
     html: `
       <h2>New Profile</h2>
       <p><strong>Email:</strong> ${founder.email}</p>
@@ -47,7 +47,7 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
 
 export async function sendWelcomeEmail(founder: Founder) {
   await getResend().emails.send({
-    from: `Sammy <${FROM()}>`,
+    from: `FounderTalk <${FROM()}>`,
     to: founder.email,
     subject: "You're in — FounderTalk",
     html: `
@@ -70,7 +70,7 @@ export async function sendMatchEmail(
   const responseUrl = `${BASE_URL()}/match/${token}`
 
   await getResend().emails.send({
-    from: `Sammy at FounderTalk <${FROM()}>`,
+    from: `FounderTalk <${FROM()}>`,
     to: recipient.email,
     subject: 'A founder wants to talk to you',
     html: `
@@ -108,13 +108,13 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
 
   await Promise.all([
     getResend().emails.send({
-      from: `Sammy <${FROM()}>`,
+      from: `FounderTalk <${FROM()}>`,
       to: founderA.email,
       subject: `Your intro — ${nameB}`,
       html: emailTo(founderA.email, nameA, nameB, founderB.email),
     }),
     getResend().emails.send({
-      from: `Sammy <${FROM()}>`,
+      from: `FounderTalk <${FROM()}>`,
       to: founderB.email,
       subject: `Your intro — ${nameA}`,
       html: emailTo(founderB.email, nameB, nameA, founderA.email),
@@ -125,7 +125,7 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
 export async function sendPasswordResetEmail(founder: { email: string; first_name?: string | null }, token: string) {
   const resetUrl = `${BASE_URL()}/reset-password/${token}`
   await getResend().emails.send({
-    from: `Sammy at FounderTalk <${FROM()}>`,
+    from: `FounderTalk <${FROM()}>`,
     to: founder.email,
     subject: 'Reset your FounderTalk password',
     html: `
