@@ -88,7 +88,7 @@ export default function JoinForm({ topics: initialTopics }: { topics: Array<{ id
       <Nav />
 
       <main className="flex-1 px-8 py-12 max-w-2xl mx-auto w-full">
-        <h1 className="text-3xl font-semibold text-[#0f1f3d] mb-2">Create Anonymous Profile</h1>
+        <h1 className="text-3xl font-semibold text-[#0f1f3d] mb-2">Create Profile</h1>
         <p className="text-[#6b7280] mb-10">Tell us about yourself and what you're working through. We'll match you with founders who've been there. All data is anonymous.</p>
 
         <form onSubmit={handleSubmit} className="space-y-12">
