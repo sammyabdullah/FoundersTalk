@@ -12,7 +12,7 @@ export async function sendApplicationConfirmation(founder: Founder) {
     subject: "Welcome to FounderTalk",
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Welcome to FounderTalk. Your profile is live.</p>
+      <p>Welcome to FounderTalk. Your profile has been created.</p>
       <p>When we find a good match we'll send you an email with their profile and ask if you'd like an intro — we'll always get your opt-in before making any introduction.</p>
       <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account.</p>
       <p><a href="${BASE_URL()}/login">Log in to your profile →</a></p>
@@ -27,9 +27,9 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
   await getResend().emails.send({
     from: `FounderTalk <${FROM()}>`,
     to: 'sammy@blossomstreetventures.com',
-    subject: `New FounderTalk application — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
+    subject: `New FounderTalk profile — ${ARR_BUCKET_LABELS[founder.arr_bucket]}`,
     html: `
-      <h2>New Application</h2>
+      <h2>New Profile</h2>
       <p><strong>Email:</strong> ${founder.email}</p>
       <p><strong>First name:</strong> ${founder.first_name || '—'}</p>
       <p><strong>ARR:</strong> ${ARR_BUCKET_LABELS[founder.arr_bucket]}</p>

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
   if (founderErr) {
     if (founderErr.code === '23505') {
-      return NextResponse.json({ error: 'An application with this email already exists.' }, { status: 409 })
+      return NextResponse.json({ error: 'A profile with this email already exists.' }, { status: 409 })
     }
     return NextResponse.json({ error: founderErr.message }, { status: 500 })
   }
