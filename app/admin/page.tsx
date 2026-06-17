@@ -9,8 +9,8 @@ type Tab = 'signups' | 'founders' | 'matches'
 interface ProposedMatch {
   founderA: Founder
   founderB: Founder
-  topicId: string
-  topicName: string
+  topicIds: string[]
+  topicNames: string[]
 }
 
 export default function AdminPage() {
@@ -253,7 +253,7 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
     await fetch('/api/admin/send-match', {
       method: 'POST',
       headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ founderAId: p.founderA.id, founderBId: p.founderB.id, topicId: p.topicId }),
+      body: JSON.stringify({ founderAId: p.founderA.id, founderBId: p.founderB.id, topicIds: p.topicIds }),
     })
     setSending(null)
     setSkipped(s => new Set(Array.from(s).concat(key)))
@@ -292,7 +292,9 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
                     <FounderCard founder={p.founderB} label="Founder B" />
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge label={`Topic: ${p.topicName}`} active />
+                    {p.topicNames.map(name => (
+                      <Badge key={name} label={name} active />
+                    ))}
                   </div>
                   <div className="flex gap-2">
                     <button

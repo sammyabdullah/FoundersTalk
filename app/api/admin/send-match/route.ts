@@ -7,38 +7,34 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { founderAId, founderBId, topicId } = await req.json()
+  const { founderAId, founderBId, topicIds } = await req.json()
+  const primaryTopicId = Array.isArray(topicIds) ? topicIds[0] : topicIds
 
-  // Create match record
+  // Create match record (uses primary topic)
   const { data: match, error: matchErr } = await supabaseAdmin
     .from('matches')
-    .insert({ founder_a_id: founderAId, founder_b_id: founderBId, topic_id: topicId })
+    .insert({ founder_a_id: founderAId, founder_b_id: founderBId, topic_id: primaryTopicId })
     .select()
     .single()
 
   if (matchErr) return NextResponse.json({ error: matchErr.message }, { status: 500 })
 
-  // Fetch founders and topic
-  const [{ data: founderA }, { data: founderB }, { data: topic }] = await Promise.all([
+  // Fetch founders and all matching topics
+  const allTopicIds = Array.isArray(topicIds) ? topicIds : [topicIds]
+  const [{ data: founderA }, { data: founderB }, { data: topics }] = await Promise.all([
     supabaseAdmin.from('founders').select('*').eq('id', founderAId).single(),
     supabaseAdmin.from('founders').select('*').eq('id', founderBId).single(),
-    supabaseAdmin.from('topics').select('*').eq('id', topicId).single(),
+    supabaseAdmin.from('topics').select('*').in('id', allTopicIds),
   ])
 
-  if (!founderA || !founderB || !topic) {
+  if (!founderA || !founderB || !topics?.length) {
     return NextResponse.json({ error: 'Could not load founder or topic data' }, { status: 500 })
   }
 
-  // Get directions for context
-  const [{ data: aTopicRow }, { data: bTopicRow }] = await Promise.all([
-    supabaseAdmin.from('founder_topics').select('direction').eq('founder_id', founderAId).eq('topic_id', topicId).single(),
-    supabaseAdmin.from('founder_topics').select('direction').eq('founder_id', founderBId).eq('topic_id', topicId).single(),
-  ])
-
   try {
     await Promise.all([
-      sendMatchEmail(founderA, founderB, topic, bTopicRow?.direction ?? 'figuring_this_out', match.founder_a_token),
-      sendMatchEmail(founderB, founderA, topic, aTopicRow?.direction ?? 'figuring_this_out', match.founder_b_token),
+      sendMatchEmail(founderA, founderB, topics, match.founder_a_token),
+      sendMatchEmail(founderB, founderA, topics, match.founder_b_token),
     ])
   } catch (e) {
     console.error('Email error:', e)

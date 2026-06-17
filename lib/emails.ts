@@ -62,11 +62,10 @@ export async function sendWelcomeEmail(founder: Founder) {
 export async function sendMatchEmail(
   recipient: Founder,
   otherFounder: Founder,
-  topic: Topic,
-  otherDirection: string,
+  topics: Topic[],
   token: string
 ) {
-  const directionLabel = otherDirection === 'been_through_this' ? "has been through this" : "is figuring this out"
+  const topicList = topics.map(t => t.name).join(', ')
   const responseUrl = `${BASE_URL()}/match/${token}`
 
   await getResend().emails.send({
@@ -84,7 +83,7 @@ export async function sendMatchEmail(
       <p><strong>Customer type:</strong> ${CUSTOMER_TYPE_LABELS[otherFounder.customer_type]}</p>
       ${otherFounder.vertical ? `<p><strong>Vertical:</strong> ${otherFounder.vertical}</p>` : ''}
       <p><strong>Geography:</strong> ${otherFounder.geography}</p>
-      <p><strong>Matched on:</strong> ${topic.name} — ${directionLabel}</p>
+      <p><strong>Matched on:</strong> ${topicList}</p>
       ${otherFounder.open_to_share ? `<p><strong>From them:</strong> ${otherFounder.open_to_share}</p>` : ''}
       ${otherFounder.additional_notes ? `<p><strong>Additional notes:</strong> ${otherFounder.additional_notes}</p>` : ''}
       <hr>

@@ -8,8 +8,8 @@ interface FounderWithTopics extends Founder {
 export interface ProposedMatch {
   founderA: Founder
   founderB: Founder
-  topicId: string
-  topicName: string
+  topicIds: string[]
+  topicNames: string[]
 }
 
 export async function runMatching(): Promise<ProposedMatch[]> {
@@ -33,7 +33,7 @@ export async function runMatching(): Promise<ProposedMatch[]> {
   const { data: topics } = await supabaseAdmin.from('topics').select('id, name')
   const topicMap = new Map(topics?.map(t => [t.id, t.name]) ?? [])
 
-  const proposed: ProposedMatch[] = []
+  const pairMap = new Map<string, ProposedMatch>()
   const founderList = (founders ?? []) as FounderWithTopics[]
 
   for (let i = 0; i < founderList.length; i++) {
@@ -46,6 +46,8 @@ export async function runMatching(): Promise<ProposedMatch[]> {
       const aTopics = new Map(a.founder_topics.map(t => [t.topic_id, t.direction]))
       const bTopics = new Map(b.founder_topics.map(t => [t.topic_id, t.direction]))
 
+      const pairKey = [a.id, b.id].sort().join(':')
+
       for (const [topicId, aDir] of Array.from(aTopics)) {
         const bDir = bTopics.get(topicId)
         if (!bDir) continue
@@ -56,19 +58,17 @@ export async function runMatching(): Promise<ProposedMatch[]> {
 
         if (!validPair) continue
 
-        proposed.push({ founderA: a, founderB: b, topicId, topicName: topicMap.get(topicId) ?? topicId })
+        if (!pairMap.has(pairKey)) {
+          pairMap.set(pairKey, { founderA: a, founderB: b, topicIds: [], topicNames: [] })
+        }
+        const match = pairMap.get(pairKey)!
+        match.topicIds.push(topicId)
+        match.topicNames.push(topicMap.get(topicId) ?? topicId)
       }
     }
   }
 
-  // Deduplicate founder pairs — keep first match found per pair
-  const seen = new Set<string>()
-  return proposed.filter(p => {
-    const key = [p.founderA.id, p.founderB.id].sort().join(':')
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
+  return Array.from(pairMap.values())
 }
 
 export async function createMatch(founderAId: string, founderBId: string, topicId: string) {
