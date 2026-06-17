@@ -70,14 +70,19 @@ export async function POST(req: NextRequest) {
     direction: t.direction,
   }))
 
-  let emailError: string | null = null
+  const emailErrors: string[] = []
   try {
     await sendApplicationConfirmation(founder)
+  } catch (e: any) {
+    console.error('Welcome email error:', e)
+    emailErrors.push(`welcome: ${e?.message ?? 'unknown'}`)
+  }
+  try {
     await sendAdminNotification(founder, topicsWithDirection)
   } catch (e: any) {
-    console.error('Email error:', e)
-    emailError = e?.message ?? 'Unknown email error'
+    console.error('Admin notification error:', e)
+    emailErrors.push(`admin: ${e?.message ?? 'unknown'}`)
   }
 
-  return NextResponse.json({ ok: true, emailError })
+  return NextResponse.json({ ok: true, emailError: emailErrors.length > 0 ? emailErrors.join('; ') : null })
 }
