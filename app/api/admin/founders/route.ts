@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { sendWelcomeEmail } from '@/lib/emails'
 
 function checkAuth(req: NextRequest) {
   const token = req.headers.get('x-admin-token')
@@ -31,10 +30,6 @@ export async function PATCH(req: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  if (status === 'active') {
-    try { await sendWelcomeEmail(data) } catch (e) { console.error('Email error:', e) }
-  }
 
   return NextResponse.json(data)
 }
