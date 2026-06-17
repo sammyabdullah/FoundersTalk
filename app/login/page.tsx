@@ -85,7 +85,7 @@ function LoginForm() {
 
       <p className="text-sm text-[#6b7280] mt-6 text-center">
         Not a member yet?{' '}
-        <Link href="/apply" className="text-[#0f1f3d] font-medium hover:underline">Join</Link>
+        <Link href="/join" className="text-[#0f1f3d] font-medium hover:underline">Join</Link>
       </p>
     </div>
   )
