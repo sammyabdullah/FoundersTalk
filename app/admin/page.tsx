@@ -82,7 +82,7 @@ function PendingTab({ adminToken }: { adminToken: string }) {
     setLoading(true)
     fetch('/api/admin/founders?status=pending', { headers })
       .then(r => r.json())
-      .then(d => { setFounders(d); setLoading(false) })
+      .then(d => { setFounders(Array.isArray(d) ? d : []); setLoading(false) })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -142,7 +142,7 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
     setLoading(true)
     fetch('/api/admin/founders?status=active', { headers })
       .then(r => r.json())
-      .then(d => { setFounders(d); setLoading(false) })
+      .then(d => { setFounders(Array.isArray(d) ? d : []); setLoading(false) })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -234,7 +234,7 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
   const loadSent = useCallback(() => {
     fetch('/api/admin/matches', { headers })
       .then(r => r.json())
-      .then(setSentMatches)
+      .then(d => setSentMatches(Array.isArray(d) ? d : []))
   }, [headers])
 
   useEffect(() => { loadSent() }, [loadSent])
