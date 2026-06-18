@@ -165,8 +165,8 @@ export default function JoinForm({ topics: initialTopics }: { topics: Array<{ id
           <section>
             <h2 className="text-xs font-semibold uppercase tracking-widest text-[#6b7280] mb-6">Section 3 — About You</h2>
             <div className="space-y-5">
-              <Field label="First name" hint="Optional — used in emails">
-                <input type="text" value={form.first_name} onChange={e => setField('first_name', e.target.value)} className="input" placeholder="Your first name" />
+              <Field label="First name" required>
+                <input type="text" required value={form.first_name} onChange={e => setField('first_name', e.target.value)} className="input" placeholder="Your first name" />
               </Field>
             </div>
           </section>

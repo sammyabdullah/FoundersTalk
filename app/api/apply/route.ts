@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     additional_notes, topics, password,
   } = body
 
-  if (!email || !arr_bucket || !business_model || !customer_type || !geography || !company_description) {
+  if (!email || !first_name || !arr_bucket || !business_model || !customer_type || !geography || !company_description) {
     return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
   }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       geography,
       company_description,
       open_to_share: open_to_share || null,
-      first_name: first_name || null,
+      first_name,
       additional_notes: additional_notes || null,
       password_hash,
       status: 'pending',
