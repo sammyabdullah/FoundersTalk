@@ -33,3 +33,15 @@ export async function PATCH(req: NextRequest) {
 
   return NextResponse.json(data)
 }
+
+export async function DELETE(req: NextRequest) {
+  if (!checkAuth(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await req.json()
+
+  await supabaseAdmin.from('founder_topics').delete().eq('founder_id', id)
+  const { error } = await supabaseAdmin.from('founders').delete().eq('id', id)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ ok: true })
+}

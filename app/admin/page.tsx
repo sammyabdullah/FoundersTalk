@@ -162,6 +162,15 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
     load()
   }
 
+  async function deleteFounder(id: string) {
+    await fetch('/api/admin/founders', {
+      method: 'DELETE',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    load()
+  }
+
   if (loading) return <p className="text-[#6b7280]">Loading…</p>
   if (founders.length === 0) return <p className="text-[#6b7280]">No active founders.</p>
 
@@ -209,12 +218,20 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
                 </div>
               )}
 
-              <button
-                onClick={() => pause(f.id)}
-                className="text-sm text-red-600 hover:text-red-800 transition-colors"
-              >
-                Pause this founder
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => pause(f.id)}
+                  className="text-sm text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Pause this founder
+                </button>
+                <button
+                  onClick={() => { if (confirm(`Delete ${f.email}? This cannot be undone.`)) deleteFounder(f.id) }}
+                  className="text-sm text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Delete this founder
+                </button>
+              </div>
             </div>
           )}
         </div>
