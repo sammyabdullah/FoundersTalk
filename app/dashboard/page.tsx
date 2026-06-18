@@ -16,6 +16,8 @@ interface DashboardData {
     status: string
     matched_at: string
     founder_a_id: string
+    founder_a_response: boolean | null
+    founder_b_response: boolean | null
     topics: { name: string }
     founders_a: { first_name: string | null; email: string; company_description: string; arr_bucket: string }
     founders_b: { first_name: string | null; email: string; company_description: string; arr_bucket: string }
@@ -37,6 +39,8 @@ export default function DashboardPage() {
 
   const [profileForm, setProfileForm] = useState<Partial<Founder>>({})
   const [topicSelections, setTopicSelections] = useState<Record<string, 'been_through_this' | 'figuring_this_out' | null>>({})
+
+  const [responding, setResponding] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     const res = await fetch('/api/founder/me')
@@ -141,6 +145,20 @@ export default function DashboardPage() {
             ) : matches.map(m => {
               const isA = m.founder_a_id === founder.id
               const other = isA ? m.founders_b : m.founders_a
+              const myResponse = isA ? m.founder_a_response : m.founder_b_response
+              const canRespond = myResponse === null && m.status !== 'declined' && m.status !== 'expired'
+
+              async function respondToMatch(accept: boolean) {
+                setResponding(m.id)
+                await fetch('/api/founder/match-respond', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ matchId: m.id, accept }),
+                })
+                setResponding(null)
+                await load()
+              }
+
               return (
                 <div key={m.id} className="bg-white border border-black/10 rounded-xl p-5">
                   <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -151,6 +169,24 @@ export default function DashboardPage() {
                     </div>
                     <StatusBadge status={m.status} />
                   </div>
+                  {canRespond && (
+                    <div className="flex gap-2 mt-3">
+                      <button
+                        onClick={() => respondToMatch(true)}
+                        disabled={responding === m.id}
+                        className="px-4 py-2 bg-[#0f1f3d] text-white text-xs font-medium rounded-lg hover:bg-[#1e3a5f] transition-colors disabled:opacity-60"
+                      >
+                        {responding === m.id ? 'Responding…' : "Yes, I'd like to connect"}
+                      </button>
+                      <button
+                        onClick={() => respondToMatch(false)}
+                        disabled={responding === m.id}
+                        className="px-4 py-2 bg-white border border-black/15 text-xs font-medium rounded-lg hover:bg-black/5 transition-colors disabled:opacity-60"
+                      >
+                        No thanks
+                      </button>
+                    </div>
+                  )}
                   <p className="text-xs text-[#6b7280] mt-3">Matched {new Date(m.matched_at).toLocaleDateString()}</p>
                 </div>
               )
