@@ -19,8 +19,9 @@ interface DashboardData {
     founder_a_response: boolean | null
     founder_b_response: boolean | null
     topics: { name: string }
-    founders_a: { first_name: string | null; email: string; company_description: string; arr_bucket: string }
-    founders_b: { first_name: string | null; email: string; company_description: string; arr_bucket: string }
+    sharedTopicNames: string[]
+    founders_a: { id: string; first_name: string | null; email: string; company_description: string; arr_bucket: string }
+    founders_b: { id: string; first_name: string | null; email: string; company_description: string; arr_bucket: string }
   }>
 }
 
@@ -164,10 +165,13 @@ export default function DashboardPage() {
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div>
                       <p className="font-medium text-[#0f1f3d] text-sm">{other.first_name || other.email}</p>
-                      <p className="text-xs text-[#6b7280] mt-0.5">{ARR_BUCKET_LABELS[other.arr_bucket as keyof typeof ARR_BUCKET_LABELS]} · {m.topics?.name}</p>
+                      <p className="text-xs text-[#6b7280] mt-0.5">{ARR_BUCKET_LABELS[other.arr_bucket as keyof typeof ARR_BUCKET_LABELS]} · {(m.sharedTopicNames?.length > 0 ? m.sharedTopicNames : [m.topics?.name]).join(', ')}</p>
                       <p className="text-xs text-[#1a1a2e] mt-1 line-clamp-2">{other.company_description}</p>
                     </div>
-                    <StatusBadge status={m.status} />
+                    <div className="flex items-center gap-2 shrink-0">
+                      <StatusBadge status={m.status} />
+                      {m.status === 'both_accepted' && <span className="text-xs text-[#0f1f3d] font-medium">{other.email}</span>}
+                    </div>
                   </div>
                   {canRespond && (
                     <div className="flex gap-2 mt-3">

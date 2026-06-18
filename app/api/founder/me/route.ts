@@ -21,11 +21,34 @@ export async function GET() {
 
   const { data: matches } = await supabaseAdmin
     .from('matches')
-    .select('*, founders_a:founder_a_id(first_name, email, company_description, arr_bucket), founders_b:founder_b_id(first_name, email, company_description, arr_bucket), topics(name)')
+    .select('*, founders_a:founder_a_id(id, first_name, email, company_description, arr_bucket), founders_b:founder_b_id(id, first_name, email, company_description, arr_bucket), topics(name)')
     .or(`founder_a_id.eq.${founderId},founder_b_id.eq.${founderId}`)
     .order('matched_at', { ascending: false })
 
-  return NextResponse.json({ founder, topics, matches })
+  // Compute all shared complementary topics for each match
+  const enrichedMatches = await Promise.all((matches ?? []).map(async (m: any) => {
+    const otherId = m.founder_a_id === founderId ? m.founder_b_id : m.founder_a_id
+    const [{ data: myTopics }, { data: theirTopics }] = await Promise.all([
+      supabaseAdmin.from('founder_topics').select('topic_id, direction').eq('founder_id', founderId),
+      supabaseAdmin.from('founder_topics').select('topic_id, direction').eq('founder_id', otherId),
+    ])
+    const theirMap = new Map((theirTopics ?? []).map((t: any) => [t.topic_id, t.direction]))
+    const sharedTopicIds = (myTopics ?? [])
+      .filter((t: any) => {
+        const td = theirMap.get(t.topic_id)
+        return td && td !== t.direction
+      })
+      .map((t: any) => t.topic_id)
+
+    let sharedTopicNames: string[] = []
+    if (sharedTopicIds.length > 0) {
+      const { data: topicRows } = await supabaseAdmin.from('topics').select('name').in('id', sharedTopicIds)
+      sharedTopicNames = (topicRows ?? []).map((t: any) => t.name)
+    }
+    return { ...m, sharedTopicNames }
+  }))
+
+  return NextResponse.json({ founder, topics, matches: enrichedMatches })
 }
 
 export async function PATCH(req: NextRequest) {
