@@ -241,8 +241,9 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
 
   async function runMatching() {
     setRunning(true)
-    const data = await fetch('/api/admin/run-matching', { method: 'POST', headers }).then(r => r.json())
-    setProposed(data)
+    const res = await fetch('/api/admin/run-matching', { method: 'POST', headers })
+    const data = await res.json()
+    setProposed(Array.isArray(data) ? data : [])
     setSkipped(new Set())
     setRunning(false)
   }
@@ -353,20 +354,28 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
                 <p className="text-sm text-[#6b7280]">No pending opt-ins.</p>
               ) : (
                 <div className="space-y-3">
-                  {pending.map((m: any) => (
-                    <div key={m.id} className="bg-white border border-black/10 rounded-xl px-5 py-4">
-                      <div className="flex items-center justify-between gap-4 flex-wrap">
-                        <div className="text-sm">
-                          <span className="font-medium text-[#0f1f3d]">{m.founders_a?.email}</span>
-                          <span className="text-[#6b7280] mx-2">↔</span>
-                          <span className="font-medium text-[#0f1f3d]">{m.founders_b?.email}</span>
-                          <span className="text-[#6b7280] ml-2">· {m.topics?.name}</span>
+                  {pending.map((m: any) => {
+                    const aStatus = m.status === 'founder_a_accepted' || m.status === 'both_accepted' ? 'Accepted' : m.status === 'declined' && m.founder_a_response === false ? 'Declined' : 'No response'
+                    const bStatus = m.status === 'founder_b_accepted' || m.status === 'both_accepted' ? 'Accepted' : m.status === 'declined' && m.founder_b_response === false ? 'Declined' : 'No response'
+                    return (
+                      <div key={m.id} className="bg-white border border-black/10 rounded-xl px-5 py-4">
+                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                          <div className="text-sm">
+                            <span className="font-medium text-[#0f1f3d]">{m.founders_a?.email}</span>
+                            <span className="text-[#6b7280] mx-2">↔</span>
+                            <span className="font-medium text-[#0f1f3d]">{m.founders_b?.email}</span>
+                            <span className="text-[#6b7280] ml-2">· {m.topics?.name}</span>
+                          </div>
+                          <StatusBadge status={m.status} />
                         </div>
-                        <StatusBadge status={m.status} />
+                        <div className="flex gap-6 mt-2 text-xs text-[#6b7280]">
+                          <span>{m.founders_a?.email?.split('@')[0]}: <strong className={aStatus === 'Accepted' ? 'text-green-700' : aStatus === 'Declined' ? 'text-red-600' : ''}>{aStatus}</strong></span>
+                          <span>{m.founders_b?.email?.split('@')[0]}: <strong className={bStatus === 'Accepted' ? 'text-green-700' : bStatus === 'Declined' ? 'text-red-600' : ''}>{bStatus}</strong></span>
+                        </div>
+                        <p className="text-xs text-[#6b7280] mt-1">Sent {new Date(m.matched_at).toLocaleDateString()} · Expires {new Date(m.expires_at).toLocaleDateString()}</p>
                       </div>
-                      <p className="text-xs text-[#6b7280] mt-1">Sent {new Date(m.matched_at).toLocaleDateString()} · Expires {new Date(m.expires_at).toLocaleDateString()}</p>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               )}
             </div>
