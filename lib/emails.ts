@@ -15,6 +15,7 @@ export async function sendApplicationConfirmation(founder: Founder) {
       <p>Welcome to FounderTalk and thank you for creating a profile. When we find a founder who matches your topics, we'll send you an email with their profile and ask if you'd like an intro; we'll always get your opt-in and the other founder's opt-in before making any introduction.</p>
       <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account. If you have questions, reach out to Blossom Street Ventures, who created and sponsor FounderTalk: <a href="mailto:sammy@blossomstreetventures.com">sammy@blossomstreetventures.com</a>.</p>
       <p>We hope you enjoy the service. <a href="${BASE_URL()}/login">Log in to your profile →</a></p>
+      <p><em>Courtesy of Blossom Street Ventures</em></p>
     `,
   })
 }
@@ -54,7 +55,7 @@ export async function sendWelcomeEmail(founder: Founder) {
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
       <p>Welcome to FounderTalk. Your profile is live and we'll reach out when we find a good match.</p>
       <p>In the meantime, if you have any feedback on the signup experience or anything we should know, just reply to this email.</p>
-      <p>Sammy</p>
+      <p><em>Courtesy of Blossom Street Ventures</em></p>
     `,
   })
 }
@@ -102,6 +103,7 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
     <p>Hi ${recipientName},</p>
     <p>You both opted in to connect on FounderTalk. Their email is below; take it from here and good luck.</p>
     <p><strong>${otherName}:</strong> ${otherEmail}</p>
+    <p><em>Courtesy of Blossom Street Ventures</em></p>
   `
 
   await Promise.all([
