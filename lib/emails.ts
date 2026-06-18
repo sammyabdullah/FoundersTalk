@@ -98,11 +98,10 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
   const nameA = founderA.first_name || 'there'
   const nameB = founderB.first_name || 'there'
 
-  const emailTo = (recipient: string, recipientName: string, otherName: string, otherEmail: string) => `
+  const emailTo = (recipientName: string, otherName: string, otherEmail: string) => `
     <p>Hi ${recipientName},</p>
-    <p>You both opted in to connect about <strong>${topic.name}</strong>. Here's their email — take it from here.</p>
+    <p>You both opted in to connect on FounderTalk. Their email is below; take it from here and good luck.</p>
     <p><strong>${otherName}:</strong> ${otherEmail}</p>
-    <p>Sammy</p>
   `
 
   await Promise.all([
@@ -110,13 +109,13 @@ export async function sendIntroEmail(founderA: Founder, founderB: Founder, topic
       from: `FounderTalk <${FROM()}>`,
       to: founderA.email,
       subject: `Your intro — ${nameB}`,
-      html: emailTo(founderA.email, nameA, nameB, founderB.email),
+      html: emailTo(nameA, nameB, founderB.email),
     }),
     getResend().emails.send({
       from: `FounderTalk <${FROM()}>`,
       to: founderB.email,
       subject: `Your intro — ${nameA}`,
-      html: emailTo(founderB.email, nameB, nameA, founderA.email),
+      html: emailTo(nameB, nameA, founderA.email),
     }),
   ])
 }
