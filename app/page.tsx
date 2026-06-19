@@ -39,7 +39,7 @@ export default function Home() {
         {/* Left — hero */}
         <div className="flex-1">
           <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight leading-tight mb-8">
-            Two founders talk<br />to each other.
+            The conversation<br />you can't have<br />with your board.
           </h1>
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
             Every founder has questions they can't ask their board, their team, or their investors. TwoFoundersTalk connects you with a founder who's already lived through it.<br /><br />Anonymous and free.
