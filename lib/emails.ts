@@ -13,7 +13,7 @@ export async function sendApplicationConfirmation(founder: Founder) {
     html: `
       <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
       <p>Welcome to TwoFoundersTalk and thank you for creating a profile. When we find a founder who matches your topics, we'll send you an email with their profile and ask if you'd like an intro; we'll always get your opt-in and the other founder's opt-in before making any introduction.</p>
-      <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account. If you have questions, reach out to Blossom Street Ventures, who created and sponsor TwoFoundersTalk: <a href="mailto:sammy@blossomstreetventures.com">sammy@blossomstreetventures.com</a>.</p>
+      <p>You can log in any time to update your profile, change your topics, pause matching, or delete your account. If you have questions, reach out to Blossom Street Ventures, who created and sponsors TwoFoundersTalk: <a href="mailto:sammy@blossomstreetventures.com">sammy@blossomstreetventures.com</a>.</p>
       <p>We hope you enjoy the service. <a href="${BASE_URL()}/login">Log in to your profile →</a></p>
       <p><em>Courtesy of Blossom Street Ventures</em></p>
     `,
