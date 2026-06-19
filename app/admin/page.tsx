@@ -52,7 +52,7 @@ function AdminPageInner() {
   return (
     <div className="min-h-screen bg-[#f8f6f1]">
       <nav className="bg-[#0f1f3d] px-8 py-4 flex items-center gap-8">
-        <span className="text-white font-semibold">FounderTalk Admin</span>
+        <span className="text-white font-semibold">TwoFoundersTalk Admin</span>
         {(['signups', 'founders', 'matches'] as Tab[]).map(t => (
           <button
             key={t}

@@ -25,7 +25,7 @@ export default function Nav({ dark = false }: { dark?: boolean }) {
           className="rounded-sm"
           style={dark ? { mixBlendMode: 'screen' } : {}}
         />
-        FounderTalk
+        TwoFoundersTalk
       </Link>
       <div className="flex items-center gap-3">
         {loggedIn ? (

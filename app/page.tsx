@@ -39,10 +39,10 @@ export default function Home() {
         {/* Left — hero */}
         <div className="flex-1">
           <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight leading-tight mb-8">
-            Founders talk<br />to founders.
+            Two founders talk<br />to each other.
           </h1>
           <p className="text-lg text-white/70 mb-12 leading-relaxed max-w-lg">
-            Every founder has questions they can't ask their board, their team, or their investors. FounderTalk connects you with a founder who's already lived through it.<br /><br />Anonymous and free.
+            Every founder has questions they can't ask their board, their team, or their investors. TwoFoundersTalk connects you with a founder who's already lived through it.<br /><br />Anonymous and free.
           </p>
           <div className="flex items-center gap-3">
             <Link href="/join" className="inline-block bg-white text-[#0f1f3d] font-medium px-8 py-4 rounded-lg hover:bg-white/90 transition-colors">

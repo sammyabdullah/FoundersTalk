@@ -334,7 +334,7 @@ function Shell({ children, onLogout }: { children: React.ReactNode; onLogout: ()
       <nav className="px-8 py-5 border-b border-black/5 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
           <Image src="/logo.jpg" alt="" width={32} height={32} className="rounded-sm" />
-          FounderTalk
+          TwoFoundersTalk
         </Link>
         <button onClick={onLogout} className="text-sm text-[#6b7280] hover:text-[#1a1a2e] transition-colors">
           Sign out

@@ -1,4 +1,4 @@
--- FoundersTalk Database Schema
+-- TwoFoundersTalk Database Schema
 
 -- Enums
 CREATE TYPE arr_bucket AS ENUM ('pre_revenue', 'under_1m', 'one_to_5m', 'five_to_20m', 'over_20m');

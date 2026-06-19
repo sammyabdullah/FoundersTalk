@@ -97,7 +97,7 @@ export default function LoginPage() {
       <nav className="px-8 py-6 border-b border-black/5">
         <Link href="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-[#0f1f3d]">
           <Image src="/logo.jpg" alt="" width={32} height={32} className="rounded-sm" />
-          FounderTalk
+          TwoFoundersTalk
         </Link>
       </nav>
       <main className="flex-1 flex items-center justify-center px-8">
