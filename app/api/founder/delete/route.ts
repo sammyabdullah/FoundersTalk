@@ -6,6 +6,8 @@ export async function DELETE() {
   const founderId = await getSession()
   if (!founderId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  await supabaseAdmin.from('founder_topics').delete().eq('founder_id', founderId)
+
   const { error } = await supabaseAdmin
     .from('founders')
     .delete()

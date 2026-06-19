@@ -2,8 +2,8 @@ import { Resend } from 'resend'
 import { Founder, Topic, ARR_BUCKET_LABELS, BUSINESS_MODEL_LABELS, CUSTOMER_TYPE_LABELS } from './types'
 
 function getResend() { return new Resend(process.env.RESEND_API_KEY) }
-function FROM() { return process.env.FROM_EMAIL || 'hello@founderstalk.com' }
-function BASE_URL() { return process.env.NEXT_PUBLIC_BASE_URL || 'https://founderstalk.com' }
+function FROM() { return process.env.FROM_EMAIL || 'hello@twofounderstalk.com' }
+function BASE_URL() { return process.env.NEXT_PUBLIC_BASE_URL || 'https://twofounderstalk.com' }
 
 export async function sendApplicationConfirmation(founder: Founder) {
   await getResend().emails.send({
@@ -46,19 +46,6 @@ export async function sendAdminNotification(founder: Founder, topics: Array<{ na
   })
 }
 
-export async function sendWelcomeEmail(founder: Founder) {
-  await getResend().emails.send({
-    from: `TwoFoundersTalk <${FROM()}>`,
-    to: founder.email,
-    subject: "You're in — TwoFoundersTalk",
-    html: `
-      <p>Hi${founder.first_name ? ` ${founder.first_name}` : ''},</p>
-      <p>Welcome to TwoFoundersTalk. Your profile is live and we'll reach out when we find a good match.</p>
-      <p>In the meantime, if you have any feedback on the signup experience or anything we should know, just reply to this email.</p>
-      <p><em>Courtesy of Blossom Street Ventures</em></p>
-    `,
-  })
-}
 
 export async function sendMatchEmail(
   recipient: Founder,

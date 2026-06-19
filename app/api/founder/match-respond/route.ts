@@ -17,6 +17,10 @@ export async function POST(req: NextRequest) {
 
   if (error || !match) return NextResponse.json({ error: 'Match not found' }, { status: 404 })
 
+  if (new Date(match.expires_at) < new Date()) {
+    return NextResponse.json({ error: 'This match has expired.' }, { status: 410 })
+  }
+
   const isA = match.founder_a_id === founderId
   const isB = match.founder_b_id === founderId
   if (!isA && !isB) return NextResponse.json({ error: 'Not your match' }, { status: 403 })

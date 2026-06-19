@@ -53,6 +53,10 @@ export async function POST(req: NextRequest, { params }: { params: { token: stri
 
   if (error || !match) return NextResponse.json({ error: 'Match not found' }, { status: 404 })
 
+  if (new Date(match.expires_at) < new Date()) {
+    return NextResponse.json({ error: 'This match has expired.' }, { status: 410 })
+  }
+
   const isA = match.founder_a_token === token
 
   const updateField = isA ? 'founder_a_response' : 'founder_b_response'

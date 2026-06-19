@@ -121,7 +121,7 @@ export default function DashboardPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <StatCard label="Intros sent" value={totalMatches} />
+          <StatCard label="Total matches" value={totalMatches} />
           <StatCard label="Both accepted" value={accepted} />
           <StatCard label="Awaiting response" value={pending} />
         </div>

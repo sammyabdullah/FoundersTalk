@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import bcrypt from 'bcryptjs'
 
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'foundertalk-secret-change-me')
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'twofounderstalk-secret-change-me')
 const COOKIE = 'ft_session'
 
 export async function hashPassword(password: string) {

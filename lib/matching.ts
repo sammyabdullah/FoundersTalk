@@ -1,5 +1,5 @@
 import { supabaseAdmin } from './supabase'
-import { Founder, Match } from './types'
+import { Founder } from './types'
 
 interface FounderWithTopics extends Founder {
   founder_topics: Array<{ topic_id: string; direction: string }>
@@ -69,15 +69,4 @@ export async function runMatching(): Promise<ProposedMatch[]> {
   }
 
   return Array.from(pairMap.values())
-}
-
-export async function createMatch(founderAId: string, founderBId: string, topicId: string) {
-  const { data, error } = await supabaseAdmin
-    .from('matches')
-    .insert({ founder_a_id: founderAId, founder_b_id: founderBId, topic_id: topicId })
-    .select()
-    .single()
-
-  if (error) throw error
-  return data as Match
 }
