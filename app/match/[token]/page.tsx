@@ -31,10 +31,7 @@ export default function MatchPage({ params }: { params: { token: string } }) {
 
   useEffect(() => {
     fetch(`/api/match/${params.token}`)
-      .then(r => {
-        if (!r.ok) throw new Error()
-        return r.json()
-      })
+      .then(r => r.json())
       .then(d => { setData(d); setPageState('ready') })
       .catch(() => setPageState('error'))
   }, [params.token])
@@ -42,15 +39,11 @@ export default function MatchPage({ params }: { params: { token: string } }) {
   async function respond(accept: boolean) {
     setPageState('responding')
     setResponse(accept ? 'yes' : 'no')
-    const res = await fetch(`/api/match/${params.token}`, {
+    await fetch(`/api/match/${params.token}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ accept }),
     })
-    if (!res.ok) {
-      setPageState('error')
-      return
-    }
     setPageState('done')
   }
 
