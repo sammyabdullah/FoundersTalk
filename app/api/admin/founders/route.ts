@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { cancelPendingMatches } from '@/lib/pause'
 
 function checkAuth(req: NextRequest) {
   const token = req.headers.get('x-admin-token')
@@ -30,6 +31,10 @@ export async function PATCH(req: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  if (status === 'paused') {
+    await cancelPendingMatches(id)
+  }
 
   return NextResponse.json(data)
 }

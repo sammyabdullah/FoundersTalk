@@ -20,6 +20,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
   }
 
+  if (founder.status === 'paused') {
+    return NextResponse.json({ error: 'Your account is paused. Please contact us to reactivate.' }, { status: 403 })
+  }
+
   const token = await createSession(founder.id)
   setSessionCookie(token)
 
