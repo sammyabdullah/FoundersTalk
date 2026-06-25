@@ -247,7 +247,7 @@ export default function DashboardPage() {
 
             <div className="border-t border-black/10 pt-6 mt-6">
               <p className="text-sm font-medium text-[#1a1a2e] mb-1">Pause matching</p>
-              <p className="text-sm text-[#6b7280] mb-4">While paused, you won't be considered for new matches or receive opt-in emails. You can resume at any time.</p>
+              <p className="text-sm text-[#6b7280] mb-4">While paused, you won't be considered for new matches, pending matches will be cancelled, and you will be signed out. Contact us to reactivate.</p>
               <button
                 onClick={async () => {
                   const currentStatus = data?.founder.status
