@@ -10,16 +10,6 @@ export async function POST(req: NextRequest) {
   const { founderAId, founderBId, topicIds } = await req.json()
   const primaryTopicId = Array.isArray(topicIds) ? topicIds[0] : topicIds
 
-  const { data: participants } = await supabaseAdmin
-    .from('founders')
-    .select('id, status')
-    .in('id', [founderAId, founderBId])
-
-  const paused = participants?.filter(p => p.status === 'paused')
-  if (paused && paused.length > 0) {
-    return NextResponse.json({ error: 'Cannot create match: one or more participants are paused.' }, { status: 400 })
-  }
-
   // Create match record (uses primary topic)
   const { data: match, error: matchErr } = await supabaseAdmin
     .from('matches')

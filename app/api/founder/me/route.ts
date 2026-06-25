@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { getSession } from '@/lib/auth'
-import { cancelPendingMatches } from '@/lib/pause'
 
 export async function GET() {
   const founderId = await getSession()
@@ -14,7 +13,6 @@ export async function GET() {
     .single()
 
   if (!founder) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  if (founder.status === 'paused') return NextResponse.json({ error: 'Account paused' }, { status: 403 })
 
   const { data: topics } = await supabaseAdmin
     .from('founder_topics')
@@ -72,10 +70,6 @@ export async function PATCH(req: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  if (updates.status === 'paused') {
-    await cancelPendingMatches(founderId)
-  }
 
   // Update topics if provided
   if (body.topics) {

@@ -21,10 +21,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'This match has expired.' }, { status: 410 })
   }
 
-  if (match.founders_a.status === 'paused' || match.founders_b.status === 'paused') {
-    return NextResponse.json({ error: 'This match is no longer available.' }, { status: 403 })
-  }
-
   const isA = match.founder_a_id === founderId
   const isB = match.founder_b_id === founderId
   if (!isA && !isB) return NextResponse.json({ error: 'Not your match' }, { status: 403 })

@@ -13,10 +13,6 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
 
   if (error || !match) return NextResponse.json({ error: 'Match not found' }, { status: 404 })
 
-  if (match.founders_a.status === 'paused' || match.founders_b.status === 'paused') {
-    return NextResponse.json({ error: 'This match is no longer available.' }, { status: 403 })
-  }
-
   const isA = match.founder_a_token === token
   const me = isA ? match.founders_a : match.founders_b
   const other = isA ? match.founders_b : match.founders_a
@@ -59,10 +55,6 @@ export async function POST(req: NextRequest, { params }: { params: { token: stri
 
   if (new Date(match.expires_at) < new Date()) {
     return NextResponse.json({ error: 'This match has expired.' }, { status: 410 })
-  }
-
-  if (match.founders_a.status === 'paused' || match.founders_b.status === 'paused') {
-    return NextResponse.json({ error: 'This match is no longer available.' }, { status: 403 })
   }
 
   const isA = match.founder_a_token === token
