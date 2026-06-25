@@ -22,7 +22,7 @@ interface MatchData {
   isA: boolean
 }
 
-type PageState = 'loading' | 'ready' | 'responding' | 'done' | 'error'
+type PageState = 'loading' | 'ready' | 'responding' | 'done' | 'error' | 'unavailable'
 
 export default function MatchPage({ params }: { params: { token: string } }) {
   const [data, setData] = useState<MatchData | null>(null)
@@ -32,11 +32,12 @@ export default function MatchPage({ params }: { params: { token: string } }) {
   useEffect(() => {
     fetch(`/api/match/${params.token}`)
       .then(r => {
+        if (r.status === 403) { setPageState('unavailable'); throw new Error() }
         if (!r.ok) throw new Error()
         return r.json()
       })
       .then(d => { setData(d); setPageState('ready') })
-      .catch(() => setPageState('error'))
+      .catch(() => { setPageState(s => s === 'unavailable' ? s : 'error') })
   }, [params.token])
 
   async function respond(accept: boolean) {
@@ -48,7 +49,7 @@ export default function MatchPage({ params }: { params: { token: string } }) {
       body: JSON.stringify({ accept }),
     })
     if (!res.ok) {
-      setPageState('error')
+      setPageState(res.status === 403 ? 'unavailable' : 'error')
       return
     }
     setPageState('done')
@@ -58,8 +59,8 @@ export default function MatchPage({ params }: { params: { token: string } }) {
     return <Shell><p className="text-[#6b7280]">Loading…</p></Shell>
   }
 
-  if (pageState === 'error' || !data) {
-    return <Shell><p className="text-red-600">This link is invalid or has expired.</p></Shell>
+  if (pageState === 'error' || pageState === 'unavailable' || !data) {
+    return <Shell><p className="text-red-600">{pageState === 'unavailable' ? 'This user is no longer available.' : 'This link is invalid or has expired.'}</p></Shell>
   }
 
   if (pageState === 'done') {
