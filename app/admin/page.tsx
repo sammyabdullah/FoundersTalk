@@ -81,8 +81,11 @@ function PendingTab({ adminToken }: { adminToken: string }) {
   const load = useCallback(() => {
     setLoading(true)
     fetch('/api/admin/founders?status=pending', { headers })
-      .then(r => r.json())
-      .then(d => { setFounders(Array.isArray(d) ? d : []); setLoading(false) })
+      .then(r => {
+        if (r.status === 401) { setFounders([]); setLoading(false); alert('Admin password is incorrect.'); return }
+        return r.json()
+      })
+      .then(d => { if (d) { setFounders(Array.isArray(d) ? d : []); setLoading(false) } })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -140,9 +143,12 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
 
   const load = useCallback(() => {
     setLoading(true)
-    fetch('/api/admin/founders?status=active', { headers })
-      .then(r => r.json())
-      .then(d => { setFounders(Array.isArray(d) ? d : []); setLoading(false) })
+    fetch('/api/admin/founders', { headers })
+      .then(r => {
+        if (r.status === 401) { setFounders([]); setLoading(false); alert('Admin password is incorrect.'); return }
+        return r.json()
+      })
+      .then(d => { if (d) { setFounders(Array.isArray(d) ? d : []); setLoading(false) } })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -172,11 +178,11 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
   }
 
   if (loading) return <p className="text-[#6b7280]">Loading…</p>
-  if (founders.length === 0) return <p className="text-[#6b7280]">No active founders.</p>
+  if (founders.length === 0) return <p className="text-[#6b7280]">No founders in the database.</p>
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-[#0f1f3d]">Active Founders ({founders.length})</h2>
+      <h2 className="text-lg font-semibold text-[#0f1f3d]">All Founders ({founders.length})</h2>
       {founders.map(f => (
         <div key={f.id} className="bg-white border border-black/10 rounded-xl overflow-hidden">
           <button
@@ -250,8 +256,11 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
 
   const loadSent = useCallback(() => {
     fetch('/api/admin/matches', { headers })
-      .then(r => r.json())
-      .then(d => setSentMatches(Array.isArray(d) ? d : []))
+      .then(r => {
+        if (r.status === 401) { alert('Admin password is incorrect.'); return }
+        return r.json()
+      })
+      .then(d => { if (d) setSentMatches(Array.isArray(d) ? d : []) })
   }, [headers])
 
   useEffect(() => { loadSent() }, [loadSent])
