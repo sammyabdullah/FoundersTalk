@@ -76,16 +76,25 @@ function AdminPageInner() {
 function PendingTab({ adminToken }: { adminToken: string }) {
   const [founders, setFounders] = useState<Founder[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const load = useCallback(() => {
     setLoading(true)
+    setError('')
     fetch('/api/admin/founders?status=pending', { headers })
-      .then(r => {
-        if (r.status === 401) { setFounders([]); setLoading(false); alert('Admin password is incorrect.'); return }
+      .then(async r => {
+        if (!r.ok) {
+          const body = await r.text()
+          setError(`API error ${r.status}: ${body}`)
+          setFounders([])
+          setLoading(false)
+          return
+        }
         return r.json()
       })
       .then(d => { if (d) { setFounders(Array.isArray(d) ? d : []); setLoading(false) } })
+      .catch(e => { setError(`Network error: ${e.message}`); setLoading(false) })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -100,6 +109,7 @@ function PendingTab({ adminToken }: { adminToken: string }) {
   }
 
   if (loading) return <p className="text-[#6b7280]">Loading…</p>
+  if (error) return <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800 text-sm">{error}</div>
   if (founders.length === 0) return <p className="text-[#6b7280]">No new sign ups.</p>
 
   return (
@@ -137,18 +147,27 @@ function PendingTab({ adminToken }: { adminToken: string }) {
 function FoundersTab({ adminToken }: { adminToken: string }) {
   const [founders, setFounders] = useState<Founder[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [expanded, setExpanded] = useState<string | null>(null)
   const [topics, setTopics] = useState<Record<string, Array<{ direction: string; topics: { name: string } }>>>({})
   const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const load = useCallback(() => {
     setLoading(true)
+    setError('')
     fetch('/api/admin/founders', { headers })
-      .then(r => {
-        if (r.status === 401) { setFounders([]); setLoading(false); alert('Admin password is incorrect.'); return }
+      .then(async r => {
+        if (!r.ok) {
+          const body = await r.text()
+          setError(`API error ${r.status}: ${body}`)
+          setFounders([])
+          setLoading(false)
+          return
+        }
         return r.json()
       })
       .then(d => { if (d) { setFounders(Array.isArray(d) ? d : []); setLoading(false) } })
+      .catch(e => { setError(`Network error: ${e.message}`); setLoading(false) })
   }, [headers])
 
   useEffect(() => { load() }, [load])
@@ -178,6 +197,7 @@ function FoundersTab({ adminToken }: { adminToken: string }) {
   }
 
   if (loading) return <p className="text-[#6b7280]">Loading…</p>
+  if (error) return <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800 text-sm">{error}</div>
   if (founders.length === 0) return <p className="text-[#6b7280]">No founders in the database.</p>
 
   return (
@@ -252,15 +272,22 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
   const [running, setRunning] = useState(false)
   const [sending, setSending] = useState<string | null>(null)
   const [skipped, setSkipped] = useState<Set<string>>(new Set())
+  const [error, setError] = useState('')
   const headers = useMemo(() => ({ 'x-admin-token': adminToken }), [adminToken])
 
   const loadSent = useCallback(() => {
+    setError('')
     fetch('/api/admin/matches', { headers })
-      .then(r => {
-        if (r.status === 401) { alert('Admin password is incorrect.'); return }
+      .then(async r => {
+        if (!r.ok) {
+          const body = await r.text()
+          setError(`API error ${r.status}: ${body}`)
+          return
+        }
         return r.json()
       })
       .then(d => { if (d) setSentMatches(Array.isArray(d) ? d : []) })
+      .catch(e => { setError(`Network error: ${e.message}`) })
   }, [headers])
 
   useEffect(() => { loadSent() }, [loadSent])
@@ -295,6 +322,7 @@ function MatchesTab({ adminToken }: { adminToken: string }) {
 
   return (
     <div className="space-y-8">
+      {error && <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800 text-sm">{error}</div>}
       <div className="flex items-center gap-4">
         <h2 className="text-lg font-semibold text-[#0f1f3d]">Matches</h2>
         <button
