@@ -12,7 +12,13 @@ interface TopicChoice {
 
 type SubmitState = 'idle' | 'loading' | 'success' | 'error'
 
-export default function JoinForm({ topics: initialTopics }: { topics: Array<{ id: string; name: string }> }) {
+export default function JoinForm({
+  topics: initialTopics,
+  loadError = false,
+}: {
+  topics: Array<{ id: string; name: string }>
+  loadError?: boolean
+}) {
   const [topics, setTopics] = useState<TopicChoice[]>(initialTopics.map(t => ({ ...t, direction: null })))
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -43,6 +49,12 @@ export default function JoinForm({ topics: initialTopics }: { topics: Array<{ id
     e.preventDefault()
     setSubmitState('loading')
     setErrorMsg('')
+
+    if (loadError || topics.length === 0) {
+      setErrorMsg("The topic list didn't load, so we can't submit your profile yet. Please refresh the page, or email sammy@blossomstreetventures.com if it keeps happening.")
+      setSubmitState('idle')
+      return
+    }
 
     const selectedTopics = topics.filter(t => t.direction !== null)
     if (selectedTopics.length === 0) {
@@ -154,6 +166,13 @@ export default function JoinForm({ topics: initialTopics }: { topics: Array<{ id
           <section>
             <h2 className="text-xs font-semibold uppercase tracking-widest text-[#6b7280] mb-2">Section 2 — Your Experience</h2>
             <p className="text-sm text-[#6b7280] mb-6">Select any topics relevant to you and whether you've been through it, are figuring it out, or not a relevant topic for you. For topics you've been through, you'll be matched with those still figuring it out, and vice versa.</p>
+            {(loadError || topics.length === 0) && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                We couldn't load the topic list. Please refresh the page. If it keeps happening, email{' '}
+                <a href="mailto:sammy@blossomstreetventures.com" className="underline">sammy@blossomstreetventures.com</a>{' '}
+                and we'll get you set up.
+              </div>
+            )}
             <div className="space-y-3">
               {topics.map(topic => (
                 <TopicRow key={topic.id} topic={topic} onChange={direction => setTopicDirection(topic.id, direction)} />

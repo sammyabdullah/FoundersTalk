@@ -57,7 +57,13 @@ export default function DashboardPage() {
 
   useEffect(() => { load() }, [load])
   useEffect(() => {
-    fetch('/api/topics').then(r => r.json()).then(setAllTopics)
+    fetch('/api/topics')
+      .then(r => r.json())
+      .then(d => {
+        if (Array.isArray(d)) setAllTopics(d)
+        else console.error('Failed to load topics:', d?.error)
+      })
+      .catch(err => console.error('Failed to load topics:', err))
   }, [])
 
   async function logout() {
